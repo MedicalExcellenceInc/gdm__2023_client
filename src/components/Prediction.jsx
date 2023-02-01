@@ -496,7 +496,7 @@ const Prediction = () => {
           // 태아스크리닝
           setHcg(data.hcg);
           setPappa(data.pappa);
-          setResult(data.result);
+          // setResult(data.result);
           
       }// if
 
