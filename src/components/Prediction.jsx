@@ -1922,6 +1922,7 @@ const Prediction = () => {
           else{}
 
         const apiResult = getResult();
+        console.log('apiResult:' + apiResult);
         if(!checkVal) {
           
           // eslint-disable-next-line no-restricted-globals
