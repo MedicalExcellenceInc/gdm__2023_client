@@ -1782,7 +1782,7 @@ const Prediction = () => {
           vpgDur:vpgDur
         }// apiData
 
-        console.log(data);
+        // console.log(data);
 
         let result = null;
         const headers = {
@@ -1792,23 +1792,24 @@ const Prediction = () => {
         await axios
           .post(INNERWARE_SERVER, data, { headers })
           .then(function (response) {
-            result = response.data.prediction;
+            console.log('prediction :' + response.data.prediction);
+            result =  response.data.prediction;
           })
           .catch(function (error) {
-            result = 'error';
             console.log(error);
             alert(
               error + " : GDM API연동 오류입니다. 확인 후 다시 저장하세요."
             );
+            return ;
             // window.location.replace("/prediction");
           });     
 
-          return result;
+          //return result;
   
   }
 
   // db에 데이터 저장하기
-  const saveData = async() => {
+  const saveData = async(apiResult) => {
       const data = {
           date : date,
           hospital: hospital ,
@@ -1873,11 +1874,11 @@ const Prediction = () => {
           hba1c: hba1c,
           hcg: hcg,
           pappa: pappa,
-          result: result,
+          result: apiResult,
           delete_yn: 0
       };
 
-      console.log(data);
+      // console.log(data);
 
       await axios
         .post(GDM_SERVER + "/add", data)
@@ -1921,28 +1922,19 @@ const Prediction = () => {
           ) checkVal = false;
           else{}
 
-        const apiResult = getResult();
-        console.log('apiResult:' + apiResult);
+        
         if(!checkVal) {
           
           // eslint-disable-next-line no-restricted-globals
-          if(confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  {
-
+          if(!confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  return;
             
-            if(apiResult !== 'error'){
-              setResult(apiResult); 
-              saveData();
-            }
-
-          }else {}
-
         }else {
-            if(apiResult !== 'error'){
-              setResult(apiResult); 
-              saveData();
-            }
+           
         }
 
+        const apiResult = await getResult();
+        console.log(apiResult);
+        if(apiResult !== undefined)  await saveData(apiResult);
 
    
     }// ELSE
