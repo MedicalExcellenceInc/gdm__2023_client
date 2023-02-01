@@ -1889,6 +1889,7 @@ const Prediction = () => {
         .catch(function (error) {
           console.log(error);
           alert(error + " : 저장하지 못하였습니다.");
+          return;
         });
 
   }
