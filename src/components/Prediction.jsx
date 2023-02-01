@@ -1723,6 +1723,7 @@ const Prediction = () => {
    * 이너웨이브 연동 
    */
   const getResult = async() => {
+    console.log('getResult ================');
 
         // 저장하기
         const data = {
@@ -1786,22 +1787,23 @@ const Prediction = () => {
         let result = null;
         const headers = {
           "Content-type": "application/json",
-         // authKey: "6c65b545-175a-461b-baff-ca97118b102a",
+          authKey: "6c65b545-175a-461b-baff-ca97118b102a",
         };
         await axios
           .post(INNERWARE_SERVER, data, { headers })
           .then(function (response) {
-            console.log(response);
-            result = response.data.success;
+            result = response.data.prediction;
           })
           .catch(function (error) {
+            result = 'error';
             console.log(error);
             alert(
               error + " : GDM API연동 오류입니다. 확인 후 다시 저장하세요."
             );
             // window.location.replace("/prediction");
-            return;
           });     
+
+          return result;
   
   }
 
@@ -1919,16 +1921,27 @@ const Prediction = () => {
           ) checkVal = false;
           else{}
 
+        const apiResult = getResult();
         if(!checkVal) {
-
+          
           // eslint-disable-next-line no-restricted-globals
-          if(confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') ) setResult(getResult()); 
-          else return;
+          if(confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  {
 
-        }else setResult(getResult());
-       
-        // * 저장하기
-        saveData();
+            
+            if(apiResult !== 'error'){
+              setResult(apiResult); 
+              saveData();
+            }
+
+          }else {}
+
+        }else {
+            if(apiResult !== 'error'){
+              setResult(apiResult); 
+              saveData();
+            }
+        }
+
 
    
     }// ELSE
