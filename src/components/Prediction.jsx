@@ -1593,8 +1593,8 @@ const Prediction = () => {
   }
 
   /**
-   * 기본항목 필수입력항목 체크
-   * 기본 필수항목을 모두 기입해야, 하단의 예측하기 버튼이 활성화 됨.
+   * 기본항목 상단의 필수입력항목 체크
+   * 기본 필수항목 상단의항목을 모두 기입해야, 하단의 예측하기 버튼이 활성화 됨.
    * @returns true or false
    */
   const checkBasicData = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map   ) => {
@@ -1611,12 +1611,12 @@ const Prediction = () => {
         || pbmh === ""
         || naturalMcCnt === ""
         || artificialMcCnt === ""
-        || motherOriginalWeight === ""
-        || motherHeight === ""
-        || motherOriginalBmi === ""
-        || sbp === ""
-        || dbp === ""
-        || map === ""
+        // || motherOriginalWeight === ""
+        // || motherHeight === ""
+        // || motherOriginalBmi === ""
+        // || sbp === ""
+        // || dbp === ""
+        // || map === ""
       ) {
         return false;
       }else return true;
@@ -1907,8 +1907,16 @@ const Prediction = () => {
         // * 예측하기
         // 경산모 필수 항목 체크 : 출산횟수가 2회 이상이면서 경산모 필수입력항목 기재가 누락된 경우.
         if(birthCnt > 1) if(!checkMultiparousData()) checkVal = false;
-
-        if(!checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
+        else if(!checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
+        else if(
+              motherOriginalWeight === ""
+              || motherHeight === ""
+              || motherOriginalBmi === ""
+              || sbp === ""
+              || dbp === ""
+              || map === ""
+          ) checkVal = false;
+          else{}
 
         if(!checkVal) {
 
