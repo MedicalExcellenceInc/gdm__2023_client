@@ -1782,7 +1782,7 @@ const Prediction = () => {
           vpgDur:vpgDur
         }// apiData
 
-        // console.log(data);
+         console.log(data);
 
         let result = null;
         const headers = {
@@ -1794,6 +1794,7 @@ const Prediction = () => {
           .then(function (response) {
             console.log('prediction :' + response.data.prediction);
             result =  response.data.prediction;
+            saveData(result);
           })
           .catch(function (error) {
             console.log(error);
@@ -1932,9 +1933,7 @@ const Prediction = () => {
            
         }
 
-        const apiResult = await getResult();
-        console.log(apiResult);
-        if(apiResult !== undefined)  await saveData(apiResult);
+        await getResult();
 
    
     }// ELSE
