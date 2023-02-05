@@ -1781,7 +1781,7 @@ const Prediction = () => {
           vpgDur:Number(vpgDur)
         }// apiData
 
-        // console.log(data);
+        console.log(data);
 
         let result = null;
         const headers = {
@@ -1793,7 +1793,7 @@ const Prediction = () => {
           .then(function (response) {
             console.log('prediction :' + response.data.prediction);
             result =  response.data.prediction;
-            saveData(result);
+             saveData(result);
           })
           .catch(function (error) {
             console.log(error);
