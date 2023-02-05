@@ -1781,12 +1781,12 @@ const Prediction = () => {
           vpgDur:Number(vpgDur)
         }// apiData
 
-         console.log(data);
+        // console.log(data);
 
         let result = null;
         const headers = {
           "Content-type": "application/json",
-          authKey: "6c65b545-175a-461b-baff-ca97118b102a",
+          "authKey": "6c65b545-175a-461b-baff-ca97118b102a",
         };
         await axios
           .post(INNERWARE_SERVER, data, { headers })
@@ -1922,14 +1922,12 @@ const Prediction = () => {
           ) checkVal = false;
           else{}
 
-        
+        console.log("checkVal:" + checkVal);
         if(!checkVal) {
           
           // eslint-disable-next-line no-restricted-globals
           if(!confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  return;
             
-        }else {
-           
         }
 
         await getResult();
