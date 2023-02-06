@@ -519,10 +519,10 @@ const Prediction = () => {
     const value = trim(e.target.value);
     if(value !== ''){
       if(checkNumberRage(value, 0, 60)) {
-        setMotherAge(value);
-      }
-      else {focus("산모 나이를 확인하세요", getObject("motherAge"));}
-    }else setMotherAge(value);
+        alert('test');
+        setMotherAge(getOnlyNumber(value));
+      }else {focus("산모 나이를 확인하세요", getObject("motherAge"));}
+    }else setMotherAge(getOnlyNumber(value));
     
     onChangePrevBtnDiv(date, hospital, idCode, value, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
   }
@@ -612,7 +612,7 @@ const Prediction = () => {
 
     if(value !== ''){
       if(checkNumberRage(value, 1, 999)) {
-        setSbp(value);
+        setSbp(getOnlyNumber(value));
 
         // 최저혈압 입력값 있을 경우, MAP 계산함.
         // MAP : 계산식 : (최고혈압 + 2*최저혈압) / 3
@@ -624,7 +624,7 @@ const Prediction = () => {
 
       }else focus("혈압을 확인하세요", getObject("sbp"));
     }else  {
-      setSbp(value);
+      setSbp(getOnlyNumber(value));
       setMap("");
     }
 
@@ -645,7 +645,7 @@ const Prediction = () => {
 
     if(value !== ''){
       if(checkNumberRage(value, 1, 999)) {
-        setDbp(value);
+        setDbp(getOnlyNumber(value));
 
         // 최고혈압 입력값 있을 경우, MAP 계산함.
         // MAP : 계산식 : (최고혈압 + 2*최저혈압) / 3
@@ -657,7 +657,7 @@ const Prediction = () => {
 
       }else focus("혈압을 확인하세요", getObject("dbp"));
     }else  {
-      setDbp(value);
+      setDbp(getOnlyNumber(value));
       setMap("");
     }
 
@@ -721,7 +721,7 @@ const Prediction = () => {
 
 
   /**
-   * 출산 횟수가 2회 이상이면 경산모 항목 화면 노출. 반대면 비노출.
+   * 출산 횟수가 2회 이상이면 경산모 항목 화면 활성화. 반대면 비활성화.
    * @param {*} ftpn 
    * @param {*} pbmh 
    */
@@ -733,8 +733,23 @@ const Prediction = () => {
       const pregCnt = nFtpn + nPbmh; // 출산횟수 = 만삭분만횟수 + 조산횟수 
 
       setBirthCnt(pregCnt); 
-      if(1 < Number(pregCnt))document.getElementById('multiparousDiv').style.display = 'block';
-      else  {
+      if(1 <= Number(pregCnt)){
+
+        document.getElementById("survch").disabled = false;
+        document.getElementById("csec").disabled = false;
+
+        document.getElementById("prevPreviaY").disabled = false;
+        document.getElementById("prevPreviaN").disabled = false;
+        document.getElementById("prevPreviaDK").disabled = false;
+
+        document.getElementById("prevGestDmY").disabled = false;
+        document.getElementById("prevGestDmN").disabled = false;
+        document.getElementById("prevGestDmDK").disabled = false;
+
+        document.getElementById("prevLgaY").disabled = false;
+        document.getElementById("prevLgaN").disabled = false;
+        document.getElementById("prevLgaDK").disabled = false;
+      }else  {
         // 경산모가 아닐경우, 경산모 항목들 초기화 
         setSurvch("");
         setCsec("");
@@ -742,8 +757,22 @@ const Prediction = () => {
         setPrevGestDm("");
         setPrevLga("");
 
-        // 경산모 영역 비노출
-        document.getElementById('multiparousDiv').style.display = 'none';
+        // // 경산모 영역 비노출
+
+        document.getElementById("survch").disabled = true;
+        document.getElementById("csec").disabled = true;
+
+        document.getElementById("prevPreviaY").disabled = true;
+        document.getElementById("prevPreviaN").disabled = true;
+        document.getElementById("prevPreviaDK").disabled = true;
+
+        document.getElementById("prevGestDmY").disabled = true;
+        document.getElementById("prevGestDmN").disabled = true;
+        document.getElementById("prevGestDmDK").disabled = true;
+
+        document.getElementById("prevLgaY").disabled = true;
+        document.getElementById("prevLgaN").disabled = true;
+        document.getElementById("prevLgaDK").disabled = true;
       }
     }
   }
@@ -774,7 +803,7 @@ const Prediction = () => {
       }
     }else value = "";
 
-    setGestCnt(value);
+    setGestCnt(getOnlyNumber(value));
     onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
     
@@ -810,7 +839,7 @@ const Prediction = () => {
       }
     }else value = "";
 
-    setFtpn(value);
+    setFtpn(getOnlyNumber(value));
     onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
@@ -830,7 +859,7 @@ const Prediction = () => {
     let value = trim(e.target.value);
     if(value !== ''){
       if(checkNumberRage(value, 0, 20)){
-    
+
         // 경산모 항목 노출여부
         if(value !== '') if(ftpn !== '') onDisplayMultiparousDiv(ftpn, value); 
       
@@ -848,7 +877,7 @@ const Prediction = () => {
       }
     }else value = "";
 
-    setPbmh(value);
+    setPbmh(getOnlyNumber(value));
     onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
@@ -880,7 +909,7 @@ const Prediction = () => {
       }
     }else value = "";
 
-    setNaturalMcCnt(value);
+    setNaturalMcCnt(getOnlyNumber(value));
     onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
@@ -913,7 +942,7 @@ const Prediction = () => {
       }
     }else value = "";
 
-    setArtificialMcCnt(value);
+    setArtificialMcCnt(getOnlyNumber(value));
     onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, value, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
@@ -960,7 +989,7 @@ const Prediction = () => {
       const nValue = Number(value);
       if(checkNumberRage(nValue, 0, 20)) setSurvch(nValue);
       else {focus("생존아수를 확인하세요", getObject("survch"));}
-    }else setSurvch(value);
+    }else setSurvch(getOnlyNumber(value));
   }
 
 
@@ -976,9 +1005,9 @@ const Prediction = () => {
     
     if(value !== ''){
       const nValue = Number(value);
-      if(checkNumberRage(nValue, 0, 20)) setCsec(nValue);
+      if(checkNumberRage(nValue, 0, 20)) setCsec(getOnlyNumber(nValue));
       else {focus("제왕절개 수술 횟수를 확인하세요", getObject("csec"));}
-    }else setCsec(value);
+    }else setCsec();
   }
 
 
@@ -1109,7 +1138,7 @@ const Prediction = () => {
    * @param {*} e 
    */
   const onChangeEnothName = (e) => {
-    setEnothName(trim(e.target.value));
+    setEnothName(getOnlyNumber(trim(e.target.value)));
   }
 
 
@@ -1311,12 +1340,13 @@ const Prediction = () => {
    */
    const onChangeHb = (e) => {
     const value  = trim(e.target.value);
+    setHb(value);
     
-    if(value !== ''){
-      if(checkNumberRage(value, 0.1, 25.0)) {
-        setHb(checkNumberPoint(value, 1));
-      }else focus("HB를 확인하세요", getObject("hb"));
-    }else setHb(value);
+    // if(value !== ''){
+    //   if(checkNumberRage(value, 0.1, 25.0)) {
+    //     setHb(checkNumberPoint(value, 1));
+    //   }else focus("HB를 확인하세요", getObject("hb"));
+    // }else setHb(value);
   }
 
 
@@ -1328,12 +1358,8 @@ const Prediction = () => {
    */
    const onChangeWbc = (e) => {
     const value  = trim(e.target.value);
-    
-    if(value !== ''){
-      if(checkNumberRage(value, 0.01, 50.00)) {
-        setWbc(checkNumberPoint(value, 2));
-      }else focus("WBC를 확인하세요", getObject("wbc"));
-    }else setWbc(value);
+    setWbc(value);
+
   }
 
 
@@ -1345,8 +1371,9 @@ const Prediction = () => {
    */
    const onChangeHct = (e) => {
     const value  = trim(e.target.value);
+
     setHct(value);
-    
+
     // if(value !== ''){
     //   if(checkNumberRage(value, 20.0, 80.0)) {
     //     setHct(checkNumberPoint(value, 1));
@@ -1363,12 +1390,12 @@ const Prediction = () => {
    */
    const onChangePlt = (e) => {
     const value  = trim(e.target.value);
-    setPlt(value);
-    // if(value !== ''){
-    //   if(checkNumberRage(value, 2.0, 1000)) {
-    //     setPlt(checkNumberPoint(value, 1));
-    //   }else focus("PLT를 확인하세요", getObject("plt"));
-    // }else setPlt(value);
+
+    if(value !== ''){
+      if(checkNumberRage(value, 2.0, 1000)) {
+        setPlt(checkNumberPoint(value, 1));
+      }else focus("PLT를 확인하세요", getObject("plt"));
+    }else setPlt(value);
   }
 
 
@@ -1668,12 +1695,11 @@ const Prediction = () => {
    * @param {*} value : 
    */
   const checkData = async(value) => {
-
     if(value === 'E0'){
 
-      if(hylipidc === ""
-          || enoth === ""
-          || fhxDm === ""
+      if(hylipidc === ''
+          || enoth === ''
+          || fhxDm === ''
         ) return false;
 
     }else if(value === 'M1'){
@@ -1692,20 +1718,20 @@ const Prediction = () => {
       console.log('hcg : ' + hcg);
       console.log('immuneDur : ' + immuneDur);
 
-        if(hylipidc === ""
-        || enoth === ""
-        || fhxDm === ""
-        || immune === ""
-        || phxSkin === ""
-        || myomano === ""
-        || wbc === ""
-        || gfr === ""
-        || hdl === ""
-        || fasting100 === ""
-        || ogtt50 === ""
-        || hba1c === ""
-        || hcg === ""
-      )  return false;
+        if(hylipidc === ''
+        || enoth === ''
+        || fhxDm === ''
+        || immune === ''
+        || phxSkin === ''
+        || myomano === ''
+        || wbc === ''
+        || gfr === ''
+        || hdl === ''
+        || fasting100 === ''
+        || ogtt50 === ''
+        || hba1c === ''
+        || hcg === ''
+      )  {console.log('testest'); return false;}
 
 
       // 면역질환 yes일때 기간 누락할 경우,
@@ -1714,6 +1740,7 @@ const Prediction = () => {
 
     }//else
 
+    return true;
 
   }
 
@@ -1723,8 +1750,23 @@ const Prediction = () => {
    */
   const getResult = async() => {
     console.log('getResult ================');
+    
+    // HB, WBC는 0.x식의 값을 입력받으므로 1이하의 값을 넣으면 실시간 check는 불가능함.
+    // 저장 직전에 validation값 체크를 더 해줌.
+    if(checkNumberRage(wbc, 0.01, 50.00)) {
+      setWbc(checkNumberPoint(wbc, 2));
 
-        // 저장하기
+      if(checkNumberRage(hb, 0.1, 25.0)) {
+        setHb(checkNumberPoint(hb, 1));
+
+        if(checkNumberRage(hct, 20.0, 80.0)) {
+          setHct(checkNumberPoint(hct, 1));
+
+          if(checkNumberRage(plt, 2.0, 1000)) {
+            setPlt(checkNumberPoint(plt, 1));
+
+
+              // 저장하기
         const data = {
           date : date,
           instcd: hospital,
@@ -1801,10 +1843,27 @@ const Prediction = () => {
               error + " : GDM API연동 오류입니다. 확인 후 다시 저장하세요."
             );
             return ;
-            // window.location.replace("/prediction");
-          });     
+          });  
 
-          //return result;
+          // 저장하기 끝
+
+
+
+          }else focus("PLT를 확인하세요", getObject("plt"));
+        
+
+        }else focus("HCT를 확인하세요", getObject("hct"));
+
+
+        
+      }else focus("HB를 확인하세요", getObject("hb"));
+  
+             
+  
+    }else focus("WBC를 확인하세요", getObject("wbc"));
+
+
+   
   
   }
 
@@ -1911,18 +1970,17 @@ const Prediction = () => {
         // * 예측하기
         // 경산모 필수 항목 체크 : 출산횟수가 2회 이상이면서 경산모 필수입력항목 기재가 누락된 경우.
         if(birthCnt > 1) if(!checkMultiparousData()) checkVal = false;
-        else if(!checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
+        else if(! await checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
         else if(
-              motherOriginalWeight === ""
+              motherOriginalWeight === ''
               || motherHeight === ""
-              || motherOriginalBmi === ""
-              || sbp === ""
-              || dbp === ""
-              || map === ""
+              || motherOriginalBmi === ''
+              || sbp === ''
+              || dbp === ''
+              || map === ''
           ) checkVal = false;
           else{}
 
-        console.log("checkVal:" + checkVal);
         if(!checkVal) {
           
           // eslint-disable-next-line no-restricted-globals
@@ -1930,7 +1988,7 @@ const Prediction = () => {
             
         }
 
-        await getResult();
+       await getResult();
 
    
     }// ELSE
@@ -2380,6 +2438,7 @@ const Prediction = () => {
             <button
                 value="1"
                 id="prevPreviaY"
+                name="prevPrevia"
                 style={{ marginRight: "30px" }}
                 onClick={onChangePrevPrevia}
                 className={
@@ -2391,6 +2450,7 @@ const Prediction = () => {
               <button 
                 value="0" 
                 id="prevPreviaN" 
+                name="prevPrevia"
                 onClick={onChangePrevPrevia}
                 style={{ marginRight: "30px" }}
                 className={
@@ -2401,7 +2461,8 @@ const Prediction = () => {
               </button>
               <button 
                 value="DK" 
-                id="prevPreviaDK" 
+                id="prevPreviaDK"
+                name="prevPrevia" 
                 onClick={onChangePrevPrevia}
                 className={
                   prevPrevia === null
@@ -2419,6 +2480,7 @@ const Prediction = () => {
             <button
                 value="1"
                 id="prevGestDmY"
+                name="prevGestDm"
                 style={{ marginRight: "30px" }}
                 onClick={onChangePrevGest}
                 className={
@@ -2430,6 +2492,7 @@ const Prediction = () => {
               <button 
                 value="0" 
                 id="prevGestDmN" 
+                name="prevGestDm"
                 onClick={onChangePrevGest}
                 style={{ marginRight: "30px" }}
                 className={
@@ -2440,7 +2503,8 @@ const Prediction = () => {
               </button>
               <button 
                 value="DK" 
-                id="prevGestDmDK" 
+                id="prevGestDmDK"
+                name="prevGestDm" 
                 onClick={onChangePrevGest}
                 className={
                   prevGestDm === null
@@ -2458,6 +2522,7 @@ const Prediction = () => {
             <button
                 value="1"
                 id="prevLgaY"
+                name="prevLga"
                 onClick={onChangePrevLga}
                 style={{ marginRight: "30px" }}
                 className={
@@ -2468,7 +2533,8 @@ const Prediction = () => {
               </button>
               <button 
                 value="0" 
-                id="prevLgaN" 
+                id="prevLgaN"
+                name="prevLga"
                 onClick={onChangePrevLga}
                 style={{ marginRight: "30px" }}
                 className={
@@ -2479,7 +2545,8 @@ const Prediction = () => {
               </button>
               <button 
                 value="DK" 
-                id="prevLgaDK" 
+                id="prevLgaDK"
+                name="prevLga" 
                 onClick={onChangePrevLga}
                 className={
                   prevLga === null 
@@ -2673,7 +2740,7 @@ const Prediction = () => {
                 id="enothName"
                 value={enothName}
                 onChange={onChangeEnothName}
-                placeholder="***"
+                placeholder="질환명을 입력해주세요"
                 disabled= {
                   (enoth === "0" || enoth === null) ? true:false
                 }
@@ -2725,7 +2792,7 @@ const Prediction = () => {
                 id="admDigestName"
                 value={admDigestName}
                 onChange={onChangeAdmDigestName}
-                placeholder="***"
+                placeholder="질환명을 입력해주세요"
                 disabled= {
                   (admDigest === "0" || admDigest === null) ? true:false
                 }
@@ -2776,7 +2843,7 @@ const Prediction = () => {
                 id="admBloodName"
                 value={admBloodName}
                 onChange={onChangeAdmBloodName}
-                placeholder="***"
+                placeholder="질환명을 입력해주세요"
                 disabled= {
                   (admBlood === "0" || admBlood === null) ? true:false
                 }
@@ -2844,7 +2911,7 @@ const Prediction = () => {
                 id="immuneDurName"
                 value={immuneDurName}
                 onChange={onChangeImmuneDurName}
-                placeholder="***"
+                placeholder="질환명을 입력해주세요"
                 style={{ width: "200px" }}
                 disabled= {
                   (immune === "0" || immune === null) ? true:false
@@ -2899,7 +2966,7 @@ const Prediction = () => {
                 id="phxSkinName"
                 value={phxSkinName}
                 onChange={onChangePhxSkinName}
-                placeholder="***"
+                placeholder="질환명을 입력해주세요"
                 disabled= {
                   (phxSkin === "0" || phxSkin === null) ? true:false
                 }
@@ -3456,27 +3523,23 @@ const Prediction = () => {
 
 
 
-
-
-
-
-       
-
-       
-          <div id="prevBtnDiv"  style={{display:"none"}} className="bottom-div">
-            <button  className="prediction-btn" onClick={addData}>
-            예측하기
-          </button>
+        <div id="prevBtnDiv" style={{display:"block"}}  className="prediction-main-item2">
+            <div className='left'></div>
+            <div className="right">
+             <button onClick={addData}>예측하기</button>
+            </div>
         </div>
-       
-
 
 
         
-
-        <div className="bottom-div" >
+        <div className="prediction-main-item2">
+          <div className='left'></div>
+          <div className="right">
           Copyright 2022. Medical Excellence inc. all rights reserved.
+          </div>
         </div>
+
+
       </div>
 
     </div>
