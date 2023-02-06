@@ -519,7 +519,6 @@ const Prediction = () => {
     const value = trim(e.target.value);
     if(value !== ''){
       if(checkNumberRage(value, 0, 60)) {
-        alert('test');
         setMotherAge(getOnlyNumber(value));
       }else {focus("산모 나이를 확인하세요", getObject("motherAge"));}
     }else setMotherAge(getOnlyNumber(value));
