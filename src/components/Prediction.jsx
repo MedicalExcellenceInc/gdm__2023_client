@@ -1998,7 +1998,7 @@ const Prediction = () => {
   return (
     
     <div className="content-container">
-      <div className="prediction-description">예측 필요항목<span style={{fontSize: 9, color: '#f55d42', marginBottom: 25,  marginLeft: 6 }} >●</span><font style={{marginLeft: 50, fontWeight:'lighter'}}>선택항목</font></div> 
+      <div className="prediction-description">예측 필요항목<span style={{fontSize: 20,  fontWeight:'bolder' , color: '#f55d42', marginBottom: 25,  marginLeft: 6 }} >●</span><font style={{marginLeft: 50, fontWeight:'lighter'}}>선택항목</font></div> 
       <div className="prediction-main">
         <div className="prediction-main-item ">
           <div className="left_empty" />
