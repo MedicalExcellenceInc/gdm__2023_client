@@ -28,8 +28,15 @@ const getFormatDate= (date) => {
  * @param {*} value 
  */
 const getOnlyNumber = (value) => {
+  // if(validationNum(value)) return value;
+  // else return value.replace('.','');
+
   if(validationNum(value)) return value;
-  else return value.replace('.','');
+  else{
+    // 소수점이 들어오면 소수점 이하는 생략하고 반환함.
+    const arr = value.split(".");
+    return arr[0];
+  }
 }
 
 
@@ -98,6 +105,10 @@ const checkNumberRage = (value, min, max) => {
   const fValue = parseFloat(value);
   const fMin = parseFloat(min);
   const fMax = parseFloat(max);
+
+  console.log('fValue :' + fValue);
+  console.log('fMin :' + fMin);
+  console.log('fMax :' + fMax);
 
   return (fMin <= fValue && fValue <= fMax) ? true:false;
 }
@@ -230,9 +241,10 @@ const Prediction = () => {
     const value = trim(e.target.value);
 
     if(value !== ''){
-      if(checkNumberRage(value, 0, 42)){
-        if(crntGestWeeksD !== '') calculateEdc(value, crntGestWeeksD, date);
-        setCrntGestWeeksW(value);
+      const nValue = getOnlyNumber(value);
+      if(checkNumberRage(nValue, 0, 42)){
+        if(crntGestWeeksD !== '') calculateEdc(nValue, crntGestWeeksD, date);
+        setCrntGestWeeksW(nValue);
       }else focus('임신주수를 확인하세요.', getObject('crntGestWeeksW')); 
     }else {
       setEdc("0000-00-00");
@@ -251,9 +263,10 @@ const Prediction = () => {
     const value = trim(e.target.value);
 
     if(value !== ''){
-      if(checkNumberRage(value, 0, 6)){
-        if(crntGestWeeksW !== '') calculateEdc(crntGestWeeksW, value, date);
-        setCrntGestWeeksD(value);
+      const nValue = getOnlyNumber(value);
+      if(checkNumberRage(nValue, 0, 6)){
+        if(crntGestWeeksW !== '') calculateEdc(crntGestWeeksW, nValue, date);
+        setCrntGestWeeksD(nValue);
       }else focus('임신주수를 확인하세요.', getObject('crntGestWeeksD')); 
     }else {
       setEdc("0000-00-00");
@@ -451,6 +464,9 @@ const Prediction = () => {
           setPrevGestDm(data.prev_gest_dm);
           setPrevLga(data.prev_lga);
 
+          // 읽어온값에서 출산횟수가 1보다 많으면 경산모 활성화. 아닐때는 비활성화
+          onDisplayMultiparousDiv(data.ftpn, data.pbmh);
+
           // 과거력
           setPhxCycle(data.phx_cycle);
           setIgt(data.igt);
@@ -502,6 +518,8 @@ const Prediction = () => {
 
       // 기존 데이터를 가져와 뿌려줬을때는 '예측하기'버튼을 바로 노출.
       document.getElementById("prevBtnDiv").style.display = 'block';
+      document.getElementById("prevBtnDiv").style.alignItems = 'center';
+      document.getElementById("prevBtnDiv").style.flex = 7;
     }// if
 
     
@@ -518,8 +536,9 @@ const Prediction = () => {
   const onChangeMotherAge = (e) => {
     const value = trim(e.target.value);
     if(value !== ''){
-      if(checkNumberRage(value, 0, 60)) {
-        setMotherAge(getOnlyNumber(value));
+      const nValue = getOnlyNumber(value);
+      if(checkNumberRage(nValue, 0, 60)) {
+        setMotherAge(nValue);
       }else {focus("산모 나이를 확인하세요", getObject("motherAge"));}
     }else setMotherAge(getOnlyNumber(value));
     
@@ -535,7 +554,8 @@ const Prediction = () => {
    * @param {*} e 
    */
   const onChangeTwinKind = (e) => {
-    const value  = trim(e.target.value);
+    let value  = trim(e.target.value);
+    value = getOnlyNumber(value);
     
     if(value !== ''){
       if(checkNumberRage(value, 1, 6)) setTwinKind(value);
@@ -551,7 +571,8 @@ const Prediction = () => {
    * @param {*} e 
    */
   const onChangeMotherHeight = (e) => {
-    const value = trim(e.target.value);
+    let value = trim(e.target.value);
+
     if(value !== ''){ 
       if(checkNumberRage(value, 1, 200)) {
         setMotherHeight(value);
@@ -720,7 +741,7 @@ const Prediction = () => {
 
 
   /**
-   * 출산 횟수가 2회 이상이면 경산모 항목 화면 활성화. 반대면 비활성화.
+   * 출산 횟수가 1회 이상이면 경산모 항목 화면 활성화. 반대면 비활성화.
    * @param {*} ftpn 
    * @param {*} pbmh 
    */
@@ -785,27 +806,31 @@ const Prediction = () => {
    */
   const onChangeGestCnt = (e) => {
     let value = trim(e.target.value);
+    console.log('value0 :' + value);
     if(value !== ''){
+      console.log('value1 :' + value);
+      value = getOnlyNumber(value);
+      console.log('value2 :' + value);
+
       if(checkNumberRage(value, 0, 20)){
       
         // 총 임신횟수 validation
-        if(value !== ''
-            && ftpn !== ''
-            && pbmh !== ''
-            && naturalMcCnt !== ''
-            && artificialMcCnt !== ''
-          ) if(!calculatePreg(value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, "gestCnt" )) value = "";
+        if(!calculatePreg(value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, "gestCnt" )) 
+          setGestCnt("");
+        else {
+          setGestCnt(value);
+
+          // 예측하기 버튼 노출여부 변경
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+        }
 
       }else {
         focus('과거임신횟수를 확인하세요.' , getObject('gestCnt'));
-        value = "";
+        setGestCnt(value);
       }
-    }else value = "";
+    }else setGestCnt(value);
 
-    setGestCnt(getOnlyNumber(value));
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
-    
   }
 
 
@@ -818,28 +843,29 @@ const Prediction = () => {
   const onChangeFtpn = (e) => {
     let value = trim(e.target.value);
     if(value !== ''){
-      if(checkNumberRage(value, 0, 20)){
-    
-        // 경산모 항목 노출여부
-        if(value !== '') if(pbmh !== '') onDisplayMultiparousDiv(value, pbmh);
-        
-      
-        // 총 임신횟수 validation
-        if(gestCnt !== ''
-            && value !== ''
-            && pbmh !== ''
-            && naturalMcCnt !== ''
-            && artificialMcCnt !== ''
-          ) if(!calculatePreg(gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt, "ftpn"  )) value = "";
 
+      value = getOnlyNumber(value);
+
+      if(checkNumberRage(value, 0, 20)){
+
+        // 총 임신횟수 validation
+        if(!calculatePreg(gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt, "ftpn"  )) setFtpn("");
+        else {
+            setFtpn(value);
+
+            // 경산모 항목 노출여부
+            if(pbmh !== '') onDisplayMultiparousDiv(value, pbmh);
+
+            // 예측하기 버튼 노출여부 변경
+            onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+
+        }
       }else {
         focus('만삭분만횟수값을 확인하세요.' , getObject('ftpn'));
-        value = "";
+        setFtpn(value);
       }
-    }else value = "";
+    }else setFtpn(value);
 
-    setFtpn(getOnlyNumber(value));
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
 
@@ -857,28 +883,30 @@ const Prediction = () => {
   const onChangePbmh = (e) => {
     let value = trim(e.target.value);
     if(value !== ''){
+      value = getOnlyNumber(value);
+
       if(checkNumberRage(value, 0, 20)){
 
         // 경산모 항목 노출여부
         if(value !== '') if(ftpn !== '') onDisplayMultiparousDiv(ftpn, value); 
       
         // 총 임신횟수 validation
-        if(gestCnt !== ''
-            && ftpn !== ''
-            && value !== ''
-            && naturalMcCnt !== ''
-            && artificialMcCnt !== ''
-          ) if(!calculatePreg(gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, "pbmh"  )) value = "";
+        if(!calculatePreg(gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, "pbmh"  )) setPbmh("");
+        else {
+          setPbmh(value);
+
+          // 예측하기 버튼 노출여부 변경
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+      }
 
       }else {
         focus('조산횟수값을 확인하세요.' , getObject('pbmh'));
-        value = "";
+        setPbmh(value);
       }
-    }else value = "";
+    }else setPbmh(value);
 
-    setPbmh(getOnlyNumber(value));
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
-
+    
+    
   }
 
 
@@ -892,25 +920,28 @@ const Prediction = () => {
   const onChangeNaturalMcCnt = (e) => {
     let value = trim(e.target.value);
     if(value !== ''){
+      value = getOnlyNumber(value);
+
       if(checkNumberRage(value, 0, 20)){
       
         // 총 임신횟수 validation
-        if(gestCnt !== ''
-            && ftpn !== ''
-            && pbmh !== ''
-            && value !== ''
-            && artificialMcCnt !== ''
-          ) if(!calculatePreg(gestCnt, ftpn, pbmh, value, artificialMcCnt, "naturalMcCnt" )) value = "";
+        if(!calculatePreg(gestCnt, ftpn, pbmh, value, artificialMcCnt, "naturalMcCnt" )) setNaturalMcCnt("");
+        else {
+          setNaturalMcCnt(value);
+
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+
+        }
+          
 
       }else {
         focus('유산횟수값을 확인하세요.' , getObject('naturalMcCnt'));
-        value = "";
+        setNaturalMcCnt(value);
       }
-    }else value = "";
+    }else setNaturalMcCnt(value);
 
-    setNaturalMcCnt(getOnlyNumber(value));
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
-
+    
+   
   }
 
 
@@ -925,25 +956,26 @@ const Prediction = () => {
 
     let value = trim(e.target.value);
     if(value !== ''){
+
+      value = getOnlyNumber(value);
       if(checkNumberRage(value, 0, 20)){
       
         // 총 임신횟수 validation
-        if(gestCnt !== ''
-            && ftpn !== ''
-            && pbmh !== ''
-            && value !== ''
-            && artificialMcCnt !== ''
-          ) if(!calculatePreg(gestCnt, ftpn, pbmh, naturalMcCnt, value, "artificialMcCnt")) value = "";
+        if(!calculatePreg(gestCnt, ftpn, pbmh, naturalMcCnt, value, "artificialMcCnt")) value = "";
+        else{ 
+          setArtificialMcCnt(value);
+
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, value, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+        }
 
       }else {
         focus('유산횟수값을 확인하세요.' , getObject('artificialMcCnt'));
-        value = "";
+        setArtificialMcCnt(value);
       }
-    }else value = "";
+    }else setArtificialMcCnt(value);
 
-    setArtificialMcCnt(getOnlyNumber(value));
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, value, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
-
+  
+    
   }
 
 
@@ -966,7 +998,16 @@ const Prediction = () => {
     const nNaturalMcCnt = Number(naturalMcCnt);
     const nArtificialMcCnt = Number(artificialMcCnt);
 
+    // console.log('nFtpn : ' + nFtpn);
+    // console.log('nPbmh : ' + nFtpn);
+    // console.log('nNaturalMcCnt : ' + nNaturalMcCnt);
+    // console.log('nArtificialMcCnt : ' + nArtificialMcCnt);
+    
+
+
     const totalGestCnt = nFtpn + nPbmh + nNaturalMcCnt + nArtificialMcCnt;
+    console.log('totalGestCnt : ' + totalGestCnt);
+    console.log('nGestCnt : ' + nGestCnt);
     if(nGestCnt < totalGestCnt) {
       focus("만삭분만횟수, 조산횟수, 유산횟수의 합이 과거임신횟수보다 많을 수 없습니다.", getObject(objectId));
       return false;
@@ -1389,12 +1430,13 @@ const Prediction = () => {
    */
    const onChangePlt = (e) => {
     const value  = trim(e.target.value);
+    setPlt(value);
 
-    if(value !== ''){
-      if(checkNumberRage(value, 2.0, 1000)) {
-        setPlt(checkNumberPoint(value, 1));
-      }else focus("PLT를 확인하세요", getObject("plt"));
-    }else setPlt(value);
+    // if(value !== ''){
+    //   if(checkNumberRage(value, 2.0, 1000)) {
+    //     setPlt(checkNumberPoint(value, 1));
+    //   }else focus("PLT를 확인하세요", getObject("plt"));
+    // }else setPlt(value);
   }
 
 
@@ -1672,7 +1714,11 @@ const Prediction = () => {
  */
   const onChangePrevBtnDiv = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map) => {
     if(checkBasicData(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map)) document.getElementById("prevBtnDiv").style.display = 'block';
-    else document.getElementById("prevBtnDiv").style.display = 'none';
+    else {
+      document.getElementById("prevBtnDiv").style.display = 'none';
+      document.getElementById("prevBtnDiv").style.alignItems = 'center';
+      document.getElementById("prevBtnDiv").style.flex = 7;
+    }
   }
 
 
@@ -1694,8 +1740,10 @@ const Prediction = () => {
    * @param {*} value : 
    */
   const checkData = async(value) => {
+
     if(value === 'E0'){
 
+      // e0일때는, 고지혈증, 기타내분비질환, 당뇨병(가족력)만 필수항목임.
       if(hylipidc === ''
           || enoth === ''
           || fhxDm === ''
@@ -1730,7 +1778,7 @@ const Prediction = () => {
         || ogtt50 === ''
         || hba1c === ''
         || hcg === ''
-      )  {console.log('testest'); return false;}
+      )  return false;
 
 
       // 면역질환 yes일때 기간 누락할 경우,
@@ -1959,37 +2007,38 @@ const Prediction = () => {
   // 예측 후 저장
   // 서버 올린 뒤 api연동 결과값 확인하기. 현재는 임시값으로 테스트.
   const addData = async() => {
-    let checkVal = true;
+      let checkVal = true;
 
-    // 기본 필수 항목 체크
-    if(!checkBasicData()) {
-      alert("기본정보 필수 입력항목을 확인하세요.");
-    }else{
+      // 기본 필수 항목 체크
+      if(!checkBasicData()) {
+        alert("기본정보 필수 입력항목을 확인하세요.");
+      }else{
 
-        // * 예측하기
-        // 경산모 필수 항목 체크 : 출산횟수가 2회 이상이면서 경산모 필수입력항목 기재가 누락된 경우.
-        if(birthCnt > 1) if(!checkMultiparousData()) checkVal = false;
-        else if(! await checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
-        else if(
-              motherOriginalWeight === ''
-              || motherHeight === ""
-              || motherOriginalBmi === ''
-              || sbp === ''
-              || dbp === ''
-              || map === ''
-          ) checkVal = false;
-          else{}
 
-        if(!checkVal) {
+      // * 예측하기
+      // 경산모 필수 항목 체크 : 출산횟수가 2회 이상이면서 경산모 필수입력항목 기재가 누락된 경우.
+      if(birthCnt > 1) if(!checkMultiparousData()) checkVal = false;
+      else if(! await checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
+      else if( // 기본하위항목 중 필수 항목 체크
+            motherOriginalWeight === ''
+            || motherHeight === ""
+            || motherOriginalBmi === ''
+            || sbp === ''
+            || dbp === ''
+            || map === ''
+        ) checkVal = false;
+        else{}
+
+      if(!checkVal) {
+        
+        // eslint-disable-next-line no-restricted-globals
+        if(!confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  return;
           
-          // eslint-disable-next-line no-restricted-globals
-          if(!confirm('예측모델 필수값이 빠져있습니다. 이대로 진행하실 경우 예측 결과의 신뢰도가 떨어집니다. 진행하시겠습니까?') )  return;
-            
-        }
+      }
 
-       await getResult();
+      await getResult();
 
-   
+    
     }// ELSE
   }// CONST
 
@@ -3522,9 +3571,9 @@ const Prediction = () => {
 
 
 
-        <div id="prevBtnDiv" style={{display:"block"}}  className="prediction-main-item2">
+        <div  style={{display:"flex", alignItems: "center", flex:"7"}}  className="prediction-main-item2">
             <div className='left'></div>
-            <div className="right">
+            <div id="prevBtnDiv" className="right" style={{display:"none"}}>
              <button onClick={addData}>예측하기</button>
             </div>
         </div>
