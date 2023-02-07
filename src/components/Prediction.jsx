@@ -821,7 +821,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('gestCnt'));
-        setGestCnt(value);
+        //setGestCnt(value);
       }
     }else setGestCnt(value);
 
@@ -857,7 +857,7 @@ const [pltMsg, setPltMsg] = React.useState("");
         }
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('ftpn'));
-        setFtpn(value);
+        // setFtpn(value);
       }
     }else setFtpn(value);
 
@@ -896,7 +896,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('pbmh'));
-        setPbmh(value);
+        // setPbmh(value);
       }
     }else setPbmh(value);
 
@@ -931,7 +931,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('naturalMcCnt'));
-        setNaturalMcCnt(value);
+        // setNaturalMcCnt(value);
       }
     }else setNaturalMcCnt(value);
 
@@ -965,7 +965,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('artificialMcCnt'));
-        setArtificialMcCnt(value);
+        // setArtificialMcCnt(value);
       }
     }else setArtificialMcCnt(value);
 
