@@ -106,9 +106,9 @@ const checkNumberRage = (value, min, max) => {
   const fMin = parseFloat(min);
   const fMax = parseFloat(max);
 
-  console.log('fValue :' + fValue);
-  console.log('fMin :' + fMin);
-  console.log('fMax :' + fMax);
+  // console.log('fValue :' + fValue);
+  // console.log('fMin :' + fMin);
+  // console.log('fMax :' + fMax);
 
   return (fMin <= fValue && fValue <= fMax) ? true:false;
 }
@@ -139,6 +139,12 @@ const checkNumberPoint = (value, num) => {
 const Prediction = () => {
   // ****** 화면 콘트롤을 위한 변수들 
   const [isE0, setIsE0] = React.useState(true);  // E0 or M1. 디폴트는 E0.
+
+// ******  메시지 변수들
+const [hbMsg, setHbMsg] = React.useState("");
+const [wbcMsg, setWbcMsg] = React.useState("");
+const [hctMsg, setHctMsg] = React.useState("");
+const [pltMsg, setPltMsg] = React.useState("");
 
   // ******  입력항목 변수들
   // 기본항목
@@ -245,7 +251,7 @@ const Prediction = () => {
       if(checkNumberRage(nValue, 0, 42)){
         if(crntGestWeeksD !== '') calculateEdc(nValue, crntGestWeeksD, date);
         setCrntGestWeeksW(nValue);
-      }else focus('임신주수를 확인하세요.', getObject('crntGestWeeksW')); 
+      }else focus('0~42 사이 정수만 입력해 주세요.', getObject('crntGestWeeksW')); 
     }else {
       setEdc("0000-00-00");
       setCrntGestWeeksW(value);
@@ -267,7 +273,7 @@ const Prediction = () => {
       if(checkNumberRage(nValue, 0, 6)){
         if(crntGestWeeksW !== '') calculateEdc(crntGestWeeksW, nValue, date);
         setCrntGestWeeksD(nValue);
-      }else focus('임신주수를 확인하세요.', getObject('crntGestWeeksD')); 
+      }else focus('0~6 사이 정수만 입력해 주세요.', getObject('crntGestWeeksD')); 
     }else {
       setEdc("0000-00-00");
       setCrntGestWeeksD(value);
@@ -374,7 +380,7 @@ const Prediction = () => {
     
     if(value !== ''){
       if(checkNumberRage(value, 1, 12)) setImmuneDur(value);
-      else {focus("면역질환 기간을 확인하세요", getObject("immuneDur"));}
+      else {focus("1~12 사이 정수만 입력해 주세요.", getObject("immuneDur"));}
     }else setImmuneDur(value);
   }
 
@@ -412,7 +418,7 @@ const Prediction = () => {
   const onChangeIdCode = async(e) => {
     const value = trim(e.target.value);
     if (validationAlNum(value)) setIdCode(value.toUpperCase());
-    else focus("식별번호는 영문4자리 + 숫자4자리입니다.", getObject("idCode"));
+    else focus("영문4자 + 숫자4자만 입력해주세요. (예 : AAAA0001)", getObject("idCode"));
 
     // id code의 8자리가 입력완료되면, 해당 코드의 가장 최근 데이터를 조회해 세팅.
     if(value.length === 8){
@@ -539,7 +545,7 @@ const Prediction = () => {
       const nValue = getOnlyNumber(value);
       if(checkNumberRage(nValue, 0, 60)) {
         setMotherAge(nValue);
-      }else {focus("산모 나이를 확인하세요", getObject("motherAge"));}
+      }else {focus("0~60 사이 정수만 입력해 주세요.", getObject("motherAge"));}
     }else setMotherAge(getOnlyNumber(value));
     
     onChangePrevBtnDiv(date, hospital, idCode, value, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
@@ -559,7 +565,7 @@ const Prediction = () => {
     
     if(value !== ''){
       if(checkNumberRage(value, 1, 6)) setTwinKind(value);
-      else {focus("임신중의 아기의 수를 확인하세요", getObject("twinKind"));}
+      else {focus("1~6 사이 정수만 입력해 주세요.", getObject("twinKind"));}
     }else setTwinKind(value);
   }
 
@@ -582,7 +588,7 @@ const Prediction = () => {
         if(motherOriginalWeight !== '') setMotherOriginalBmi(getBmi(value, motherOriginalWeight));
 
       }else{
-        focus("임신 전 키를 확인하세요.", getObject("motherHeight"));
+        focus("1~200 사이 소수점 한자리까지만 입력해주세요.", getObject("motherHeight"));
         setMotherOriginalBmi("");
       }
       
@@ -611,7 +617,7 @@ const Prediction = () => {
 
         if(motherHeight !== '') setMotherOriginalBmi(getBmi(motherHeight, value));
       }else {
-        focus("임신 전 키를 확인하세요.", getObject("motherOriginalWeight"));
+        focus("1~200 사이 소수점 한자리까지만 입력해주세요.", getObject("motherOriginalWeight"));
         setMotherOriginalBmi("");
       }
       
@@ -642,7 +648,7 @@ const Prediction = () => {
           setMap(map.toFixed(1));
         }
 
-      }else focus("혈압을 확인하세요", getObject("sbp"));
+      }else focus("1~999 사이 정수만 입력해 주세요.", getObject("sbp"));
     }else  {
       setSbp(getOnlyNumber(value));
       setMap("");
@@ -675,7 +681,7 @@ const Prediction = () => {
           setMap(map.toFixed(1));
         }
 
-      }else focus("혈압을 확인하세요", getObject("dbp"));
+      }else focus("1~999 사이 정수만 입력해 주세요.", getObject("dbp"));
     }else  {
       setDbp(getOnlyNumber(value));
       setMap("");
@@ -698,23 +704,10 @@ const Prediction = () => {
 
     if(value !== ''){
       if(checkNumberRage(value, 1, 999)) setHr(value);
-      else focus("맥박을 확인하세요", getObject("hr"));
+      else focus("1~999 사이 정수만 입력해 주세요.", getObject("hr"));
     }else  setHr(value);
   }
 
-
-  /**
-   * MAP : 계산식 : (최고혈압 + 2*최저혈압) / 3
-   * 혈압 입력시 자동 계산됨.
-   * @param {*} e 
-   */
-  // const onChangeMap = (e) => {
-  //   const value = trim(e.target.value);
-  //   if(validationNum(value)) setMap(value);
-
-  //   onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, value);
-    
-  // }
 
 
 
@@ -733,7 +726,11 @@ const Prediction = () => {
 
   const onChangeVpgDur = (e) => {
     const value = Number(trim(e.target.value));
-    if(validationNum(value)) setVpgDur(value);
+
+    if(value !== ''){
+      if(checkNumberRage(value, 0, 40)) setVpgDur(value);
+      else focus("0~40  사이 정수만 입력해 주세요.", getObject("vpgDur"));
+    }else  setVpgDur(value);
   }
 
 
@@ -806,11 +803,9 @@ const Prediction = () => {
    */
   const onChangeGestCnt = (e) => {
     let value = trim(e.target.value);
-    console.log('value0 :' + value);
+  
     if(value !== ''){
-      console.log('value1 :' + value);
       value = getOnlyNumber(value);
-      console.log('value2 :' + value);
 
       if(checkNumberRage(value, 0, 20)){
       
@@ -825,7 +820,7 @@ const Prediction = () => {
         }
 
       }else {
-        focus('과거임신횟수를 확인하세요.' , getObject('gestCnt'));
+        focus('0~20 사이 정수만 입력해 주세요.' , getObject('gestCnt'));
         setGestCnt(value);
       }
     }else setGestCnt(value);
@@ -861,7 +856,7 @@ const Prediction = () => {
 
         }
       }else {
-        focus('만삭분만횟수값을 확인하세요.' , getObject('ftpn'));
+        focus('0~20 사이 정수만 입력해 주세요.' , getObject('ftpn'));
         setFtpn(value);
       }
     }else setFtpn(value);
@@ -900,7 +895,7 @@ const Prediction = () => {
       }
 
       }else {
-        focus('조산횟수값을 확인하세요.' , getObject('pbmh'));
+        focus('0~20 사이 정수만 입력해 주세요.' , getObject('pbmh'));
         setPbmh(value);
       }
     }else setPbmh(value);
@@ -935,7 +930,7 @@ const Prediction = () => {
           
 
       }else {
-        focus('유산횟수값을 확인하세요.' , getObject('naturalMcCnt'));
+        focus('0~20 사이 정수만 입력해 주세요.' , getObject('naturalMcCnt'));
         setNaturalMcCnt(value);
       }
     }else setNaturalMcCnt(value);
@@ -969,7 +964,7 @@ const Prediction = () => {
         }
 
       }else {
-        focus('유산횟수값을 확인하세요.' , getObject('artificialMcCnt'));
+        focus('0~20 사이 정수만 입력해 주세요.' , getObject('artificialMcCnt'));
         setArtificialMcCnt(value);
       }
     }else setArtificialMcCnt(value);
@@ -1028,7 +1023,7 @@ const Prediction = () => {
     if(value !== ''){
       const nValue = Number(value);
       if(checkNumberRage(nValue, 0, 20)) setSurvch(nValue);
-      else {focus("생존아수를 확인하세요", getObject("survch"));}
+      else {focus("0~20 사이 정수만 입력해 주세요.", getObject("survch"));}
     }else setSurvch(getOnlyNumber(value));
   }
 
@@ -1046,7 +1041,7 @@ const Prediction = () => {
     if(value !== ''){
       const nValue = Number(value);
       if(checkNumberRage(nValue, 0, 20)) setCsec(getOnlyNumber(nValue));
-      else {focus("제왕절개 수술 횟수를 확인하세요", getObject("csec"));}
+      else {focus("0~20 사이 정수만 입력해 주세요.", getObject("csec"));}
     }else setCsec();
   }
 
@@ -1300,7 +1295,7 @@ const Prediction = () => {
       }else{
         // 자궁근종개수는 임신횟수 이상값을 가질 수 없음.
         if(checkNumberRage(value, 0, gestCnt)) setMyomano(value);
-        else {focus("자궁근종개수를 확인하세요", getObject("myomano"));}
+        else {focus("정수만 입력해 주세요.", getObject("myomano"));}
       }
       
     }else setMyomano(value);
@@ -1381,12 +1376,6 @@ const Prediction = () => {
    const onChangeHb = (e) => {
     const value  = trim(e.target.value);
     setHb(value);
-    
-    // if(value !== ''){
-    //   if(checkNumberRage(value, 0.1, 25.0)) {
-    //     setHb(checkNumberPoint(value, 1));
-    //   }else focus("HB를 확인하세요", getObject("hb"));
-    // }else setHb(value);
   }
 
   const onBlurHB = (e) => {
@@ -1394,11 +1383,12 @@ const Prediction = () => {
 
     if(checkNumberRage(value, 0.1, 25.0)) {
       setHb(checkNumberPoint(value, 1));
+      setHbMsg("");
 
     }else {
-      alert("HB를 확인하세요"); 
+      setHbMsg("0.1~25.0 사이 소수점 한자리까지만 입력해주세요.");
       setHb("");
-    } //focus("HB를 확인하세요", getObject("hb"));
+    } 
   }
 
 
@@ -1420,9 +1410,10 @@ const Prediction = () => {
 
     if(checkNumberRage(value, 0.01, 50.00)) {
       setWbc(checkNumberPoint(value, 2));
+      setWbcMsg("");
 
     }else {
-      alert("WBC를 확인하세요"); 
+      setWbcMsg("0.01~50.00 사이 소수점 두자리까지만 입력해주세요.");
       setWbc("");
     }
   }
@@ -1444,9 +1435,10 @@ const Prediction = () => {
 
     if(checkNumberRage(value, 20.0, 80.0)) {
       setHct(checkNumberPoint(value, 1));
+      setHctMsg("");
 
     }else {
-      alert("HCT를 확인하세요"); 
+      setHctMsg("20.0~80.0 사이 소수점 한자리까지만 입력해주세요.");
       setHct("");
     }
   }
@@ -1469,9 +1461,9 @@ const Prediction = () => {
 
     if(checkNumberRage(value, 2.0, 1000)) {
       setPlt(checkNumberPoint(value, 1));
-
+      setPltMsg("");
     }else {
-      alert("PLT를 확인하세요"); 
+      setPltMsg("2.0~1000 사이 소수점 한자리까지만 입력해주세요.");
       setPlt("");
     }
   }
@@ -1489,7 +1481,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setGfr(value);
-        else {focus("GFR을 확인하세요", getObject("gfr"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("gfr"));}
       }else{
         setGfr(getOnlyNumber(value));
       }
@@ -1512,7 +1504,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setTc(value);
-        else {focus("Total cholesterol을 확인하세요", getObject("tc"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("tc"));}
       }else{
         setTc(getOnlyNumber(value));
       }
@@ -1533,7 +1525,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setHdl(value);
-        else {focus("Cholesterol을 확인하세요", getObject("hdl"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("hdl"));}
       }else{
         setHdl(getOnlyNumber(value));
       }
@@ -1554,7 +1546,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setAst(value);
-        else {focus("AST를 확인하세요", getObject("ast"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("ast"));}
       }else{
         setAst(getOnlyNumber(value));
       }
@@ -1574,7 +1566,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setAlt(value);
-        else {focus("ALT를 확인하세요", getObject("alt"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("alt"));}
       }else{
         setAlt(getOnlyNumber(value));
       }
@@ -1595,7 +1587,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setFasting100(value);
-        else {focus("FBS를 확인하세요", getObject("fasting100"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("fasting100"));}
       }else{
         setFasting100(getOnlyNumber(value));
       }
@@ -1616,7 +1608,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setOgtt50(value);
-        else {focus("50g GTT를 확인하세요", getObject("ogtt50"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("ogtt50"));}
       }else{
         setOgtt50(getOnlyNumber(value));
       }
@@ -1637,7 +1629,7 @@ const Prediction = () => {
     if(value !== ''){
       if(validationNum(value)){
         if(checkNumberRage(value, 0, 1000)) setGlucose(value);
-        else {focus("Randome glucose를 확인하세요", getObject("glucose"));}
+        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("glucose"));}
       }else{
         setGlucose(getOnlyNumber(value));
       }
@@ -1658,7 +1650,7 @@ const Prediction = () => {
     if(value !== ''){
       if(checkNumberRage(value, 1, 20)) {
         setHba1c(checkNumberPoint(value, 1));
-      }else focus("HbA1C를 확인하세요", getObject("hba1c"));
+      }else focus("1~20 사이 소수점 한자리까지만 입력해주세요", getObject("hba1c"));
     }else setHba1c(value);
   }
 
@@ -1676,7 +1668,7 @@ const Prediction = () => {
     if(value !== ''){
       if(checkNumberRage(value, 0, 100)) {
         setHcg(checkNumberPoint(value, 3));
-      }else focus("hCG를 확인하세요", getObject("hcg"));
+      }else focus("0~100 사이 소숫점 세자리까지 입력해주세요", getObject("hcg"));
     }else setHcg(value);
   }
 
@@ -1693,7 +1685,7 @@ const Prediction = () => {
     if(value !== ''){
       if(checkNumberRage(value, 0, 100)) {
         setPappa(checkNumberPoint(value, 3));
-      }else focus("PAPP-A를 확인하세요", getObject("pappa"));
+      }else focus("0~100 사이 소숫점 세자리까지 입력해주세요", getObject("pappa"));
     }else setPappa(value);
   }
 
@@ -3296,6 +3288,12 @@ const Prediction = () => {
                 <span>g/dl</span>
           </div>
         </div>
+        <div className="prediction-main-item">
+          <div className="left"></div>
+          <div className="right-description">
+            {hbMsg}
+          </div>
+        </div>
         <hr className="prediction-main_sub_border_style" />
 
 
@@ -3318,6 +3316,12 @@ const Prediction = () => {
                 <span>10⁹/L</span>
           </div>
         </div>
+        <div className="prediction-main-item">
+          <div className="left"></div>
+          <div className="right-description">
+            {wbcMsg}
+          </div>
+        </div>
         <hr className="prediction-main_sub_border_style" />
 
 
@@ -3337,6 +3341,12 @@ const Prediction = () => {
                 <span>%</span>
           </div>
         </div>
+        <div className="prediction-main-item">
+          <div className="left"></div>
+          <div className="right-description">
+            {hctMsg}
+          </div>
+        </div>
         <hr className="prediction-main_sub_border_style" />
 
 
@@ -3354,6 +3364,12 @@ const Prediction = () => {
                   type="number"
                 />
                 <span>10⁹/L</span>
+          </div>
+        </div>
+        <div className="prediction-main-item">
+          <div className="left"></div>
+          <div className="right-description">
+            {pltMsg}
           </div>
         </div>
         <hr className="prediction-main_sub_border_style" />
