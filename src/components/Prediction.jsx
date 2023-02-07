@@ -1829,17 +1829,17 @@ const [pltMsg, setPltMsg] = React.useState("");
     
     // HB, WBC는 0.x식의 값을 입력받으므로 1이하의 값을 넣으면 실시간 check는 불가능함.
     // 저장 직전에 validation값 체크를 더 해줌.
-    if(checkNumberRage(wbc, 0.01, 50.00)) {
-      setWbc(checkNumberPoint(wbc, 2));
+    // if(checkNumberRage(wbc, 0.01, 50.00)) {
+    //   setWbc(checkNumberPoint(wbc, 2));
 
       // if(checkNumberRage(hb, 0.1, 25.0)) {
       //   setHb(checkNumberPoint(hb, 1));
 
-        if(checkNumberRage(hct, 20.0, 80.0)) {
-          setHct(checkNumberPoint(hct, 1));
+        // if(checkNumberRage(hct, 20.0, 80.0)) {
+        //   setHct(checkNumberPoint(hct, 1));
 
-          if(checkNumberRage(plt, 2.0, 1000)) {
-            setPlt(checkNumberPoint(plt, 1));
+          // if(checkNumberRage(plt, 2.0, 1000)) {
+          //   setPlt(checkNumberPoint(plt, 1));
 
 
               // 저장하기
@@ -1925,10 +1925,10 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
 
-          }else focus("PLT를 확인하세요", getObject("plt"));
+        //   }else focus("PLT를 확인하세요", getObject("plt"));
         
 
-        }else focus("HCT를 확인하세요", getObject("hct"));
+        // }else focus("HCT를 확인하세요", getObject("hct"));
 
 
         
@@ -1936,7 +1936,7 @@ const [pltMsg, setPltMsg] = React.useState("");
   
              
   
-    }else focus("WBC를 확인하세요", getObject("wbc"));
+    // }else focus("WBC를 확인하세요", getObject("wbc"));
 
 
    
