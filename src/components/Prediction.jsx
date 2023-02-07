@@ -1389,6 +1389,18 @@ const Prediction = () => {
     // }else setHb(value);
   }
 
+  const onBlurHB = (e) => {
+    const value = trim(e.target.value);
+
+    if(checkNumberRage(value, 0.1, 25.0)) {
+      setHb(checkNumberPoint(value, 1));
+
+    }else {
+      alert("HB를 확인하세요"); 
+      setHb("");
+    } //focus("HB를 확인하세요", getObject("hb"));
+  }
+
 
 
 
@@ -1403,6 +1415,18 @@ const Prediction = () => {
   }
 
 
+  const onBlurWbc = (e) => {
+    const value = trim(e.target.value);
+
+    if(checkNumberRage(value, 0.01, 50.00)) {
+      setWbc(checkNumberPoint(value, 2));
+
+    }else {
+      alert("WBC를 확인하세요"); 
+      setWbc("");
+    }
+  }
+
 
 
   /**
@@ -1411,16 +1435,21 @@ const Prediction = () => {
    */
    const onChangeHct = (e) => {
     const value  = trim(e.target.value);
-
     setHct(value);
-
-    // if(value !== ''){
-    //   if(checkNumberRage(value, 20.0, 80.0)) {
-    //     setHct(checkNumberPoint(value, 1));
-    //   }else focus("HCT를 확인하세요", getObject("hct"));
-    // }else setHct(value);
   }
 
+
+  const onBlurHct = (e) => {
+    const value = trim(e.target.value);
+
+    if(checkNumberRage(value, 20.0, 80.0)) {
+      setHct(checkNumberPoint(value, 1));
+
+    }else {
+      alert("HCT를 확인하세요"); 
+      setHct("");
+    }
+  }
 
 
 
@@ -1432,11 +1461,19 @@ const Prediction = () => {
     const value  = trim(e.target.value);
     setPlt(value);
 
-    // if(value !== ''){
-    //   if(checkNumberRage(value, 2.0, 1000)) {
-    //     setPlt(checkNumberPoint(value, 1));
-    //   }else focus("PLT를 확인하세요", getObject("plt"));
-    // }else setPlt(value);
+  }
+
+
+  const onBlurPlt = (e) => {
+    const value = trim(e.target.value);
+
+    if(checkNumberRage(value, 2.0, 1000)) {
+      setPlt(checkNumberPoint(value, 1));
+
+    }else {
+      alert("PLT를 확인하세요"); 
+      setPlt("");
+    }
   }
 
 
@@ -1803,8 +1840,8 @@ const Prediction = () => {
     if(checkNumberRage(wbc, 0.01, 50.00)) {
       setWbc(checkNumberPoint(wbc, 2));
 
-      if(checkNumberRage(hb, 0.1, 25.0)) {
-        setHb(checkNumberPoint(hb, 1));
+      // if(checkNumberRage(hb, 0.1, 25.0)) {
+      //   setHb(checkNumberPoint(hb, 1));
 
         if(checkNumberRage(hct, 20.0, 80.0)) {
           setHct(checkNumberPoint(hct, 1));
@@ -1903,7 +1940,7 @@ const Prediction = () => {
 
 
         
-      }else focus("HB를 확인하세요", getObject("hb"));
+      //}else focus("HB를 확인하세요", getObject("hb"));
   
              
   
@@ -3251,6 +3288,7 @@ const Prediction = () => {
                   id="hb"
                   value={hb}
                   onChange={onChangeHb}
+                  onBlur={onBlurHB}
                   maxLength="4"
                   placeholder="0"
                   type="number"
@@ -3272,6 +3310,7 @@ const Prediction = () => {
                   id="wbc"
                   value={wbc}
                   onChange={onChangeWbc}
+                  onBlur={onBlurWbc}
                   maxLength="5"
                   placeholder="0"
                   type="number"
@@ -3290,6 +3329,7 @@ const Prediction = () => {
                   id="hct"
                   value={hct}
                   onChange={onChangeHct}
+                  onBlur={onBlurHct}
                   maxLength="4"
                   placeholder="0"
                   type="number"
@@ -3308,6 +3348,7 @@ const Prediction = () => {
                   id="plt"
                   value={plt}
                   onChange={onChangePlt}
+                  onBlur={onBlurPlt}
                   maxLength="6"
                   placeholder="0"
                   type="number"
