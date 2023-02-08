@@ -338,7 +338,7 @@ const [pltMsg, setPltMsg] = React.useState("");
     calculateEdc(crntGestWeeksW, crntGestWeeksD, value);
 
   // 기본 필수항목 체크하여 '예측하기'버튼 활성화.
-  onChangePrevBtnDiv(onChangePrevBtnDiv(value, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map););
+  onChangePrevBtnDiv(value, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map );
 }
 
   
