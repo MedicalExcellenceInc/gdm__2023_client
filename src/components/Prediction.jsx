@@ -1928,7 +1928,7 @@ const [pltMsg, setPltMsg] = React.useState("");
             console.log('prediction :' + response.data.prediction);
             result =  response.data.prediction;
             version = response.data.modelVersion;
-             saveData(result.toFixed(), version);
+             saveData(Number(result).toFixed(), version);
           })
           .catch(function (error) {
             console.log(error);
