@@ -257,7 +257,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       setCrntGestWeeksW(value);
     }
 
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, value, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+    onChangePrevBtnDiv(date, hospital, idCode, motherAge, value, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
 
   }
 
@@ -279,7 +279,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       setCrntGestWeeksD(value);
     }
 
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, value, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, value, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
 
 
   }
@@ -338,7 +338,7 @@ const [pltMsg, setPltMsg] = React.useState("");
     calculateEdc(crntGestWeeksW, crntGestWeeksD, value);
 
   // 기본 필수항목 체크하여 '예측하기'버튼 활성화.
-  onChangePrevBtnDiv(value, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map );
+  onChangePrevBtnDiv(value, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
 }
 
   
@@ -408,7 +408,7 @@ const [pltMsg, setPltMsg] = React.useState("");
     const value= trim(e.target.value);
     setHospital(value);
 
-    onChangePrevBtnDiv(date, value, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+    onChangePrevBtnDiv(date, value, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
   }
 
 
@@ -520,14 +520,20 @@ const [pltMsg, setPltMsg] = React.useState("");
           setHcg(data.hcg);
           setPappa(data.pappa);
           // setResult(data.result);
-          
-      }// if
 
-      // 기존 데이터를 가져와 뿌려줬을때는 '예측하기'버튼을 바로 노출.
-      document.getElementById("prevBtnDiv").style.display = 'block';
-      document.getElementById("prevBtnDiv").style.alignItems = 'center';
-      document.getElementById("prevBtnDiv").style.flex = 7;
+          // 기존 데이터를 가져와 뿌려줬을때는 '예측하기'버튼을 바로 노출.
+        document.getElementById("prevBtnDiv").style.display = 'block';
+        document.getElementById("prevBtnDiv").style.alignItems = 'center';
+        document.getElementById("prevBtnDiv").style.flex = 7;
+          
+      }else{
+        // 기존 데이터없을때ㄴ
+      }
+
+      
     }// if
+
+    if(value === '') onChangePrevBtnDiv(date, hospital, value, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
 
     
 
@@ -549,7 +555,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       }else {focus("0~60 사이 정수만 입력해 주세요.", getObject("motherAge"));}
     }else setMotherAge(getOnlyNumber(value));
     
-    onChangePrevBtnDiv(date, hospital, idCode, value, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+    onChangePrevBtnDiv(date, hospital, idCode, value, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
   }
 
 
@@ -595,7 +601,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       
     }else setMotherHeight(value);
 
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, value, motherOriginalBmi, sbp, dbp, map);
+    // onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
 
   }
 
@@ -624,7 +630,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       
     }else setMotherOriginalWeight(value);
     
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, value, motherHeight, motherOriginalBmi, sbp, dbp, map);
+    // onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, value, motherHeight, motherOriginalBmi, sbp, dbp, map);
 
   }
 
@@ -655,7 +661,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       setMap("");
     }
 
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, value, dbp, map);
+    // onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, value, dbp, map);
     
   }
 
@@ -688,7 +694,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       setMap("");
     }
 
-    onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, value, map);
+    // onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, value, map);
     
 
   }
@@ -824,7 +830,10 @@ const [pltMsg, setPltMsg] = React.useState("");
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('gestCnt'));
         //setGestCnt(value);
       }
-    }else setGestCnt(value);
+    }else {
+      setGestCnt(value);
+      onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, value, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
+    }
 
 
   }
@@ -860,7 +869,10 @@ const [pltMsg, setPltMsg] = React.useState("");
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('ftpn'));
         // setFtpn(value);
       }
-    }else setFtpn(value);
+    }else {
+      setFtpn(value);
+      onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, value, pbmh, naturalMcCnt, artificialMcCnt);
+    }
 
 
   }
@@ -892,14 +904,17 @@ const [pltMsg, setPltMsg] = React.useState("");
           setPbmh(value);
 
           // 예측하기 버튼 노출여부 변경
-          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt);
       }
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('pbmh'));
         // setPbmh(value);
       }
-    }else setPbmh(value);
+    }else {
+      setPbmh(value);
+      onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, value, naturalMcCnt, artificialMcCnt);
+    }
 
     
     
@@ -925,7 +940,7 @@ const [pltMsg, setPltMsg] = React.useState("");
         else {
           setNaturalMcCnt(value);
 
-          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt);
 
         }
           
@@ -934,7 +949,10 @@ const [pltMsg, setPltMsg] = React.useState("");
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('naturalMcCnt'));
         // setNaturalMcCnt(value);
       }
-    }else setNaturalMcCnt(value);
+    }else {
+      setNaturalMcCnt(value);
+      onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, artificialMcCnt);
+    }
 
     
    
@@ -961,14 +979,17 @@ const [pltMsg, setPltMsg] = React.useState("");
         else{ 
           setArtificialMcCnt(value);
 
-          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, value, value, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map);
+          onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, value);
         }
 
       }else {
         focus('0~20 사이 정수만 입력해 주세요.' , getObject('artificialMcCnt'));
         // setArtificialMcCnt(value);
       }
-    }else setArtificialMcCnt(value);
+    }else {
+      setArtificialMcCnt(value);
+      onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, value);
+    }
 
   
     
@@ -1708,7 +1729,22 @@ const [pltMsg, setPltMsg] = React.useState("");
    * @returns true or false
    */
   const checkBasicData = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt   ) => {
-      // 항목 입력 여부 확인
+    // console.log('======================');
+    // console.log('date : ' + date);
+    //   console.log('hospital : ' + hospital);
+    //   console.log('idCode : ' + idCode);
+    //   console.log('motherAge : ' + motherAge);
+    //   console.log('crntGestWeeksW : ' + crntGestWeeksW);
+    //   console.log('crntGestWeeksD : ' + crntGestWeeksD);
+    //   console.log('edc : ' + edc);
+    //   console.log('gestCnt : ' + gestCnt);
+    //   console.log('ftpn : ' + ftpn);
+    //   console.log('pbmh : ' + pbmh);
+    //   console.log('naturalMcCnt : ' + naturalMcCnt);
+    //   console.log('artificialMcCnt : ' + artificialMcCnt);
+    
+    
+    // 항목 입력 여부 확인
       if(date === ""
         || hospital === ""
         || idCode === ""
@@ -1728,6 +1764,7 @@ const [pltMsg, setPltMsg] = React.useState("");
         // || dbp === ""
         // || map === ""
       ) {
+        console.log('버튼 숨기기');
         return false;
       }else return true;
 
@@ -1755,6 +1792,9 @@ const [pltMsg, setPltMsg] = React.useState("");
  * @param {*} map 
  */
   const onChangePrevBtnDiv = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt) => {
+   
+   
+   
     if(checkBasicData(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt)) document.getElementById("prevBtnDiv").style.display = 'block';
     else {
       document.getElementById("prevBtnDiv").style.display = 'none';
