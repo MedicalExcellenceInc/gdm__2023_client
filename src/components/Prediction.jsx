@@ -1926,9 +1926,9 @@ const [pltMsg, setPltMsg] = React.useState("");
           .post(INNERWARE_SERVER, data, { headers })
           .then(function (response) {
             console.log('prediction :' + response.data.prediction);
-            result =  response.data.prediction.toFixed();
+            result =  response.data.prediction;
             version = response.data.modelVersion;
-             saveData(result, version);
+             saveData(result.toFixed(), version);
           })
           .catch(function (error) {
             console.log(error);
