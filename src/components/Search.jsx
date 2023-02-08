@@ -145,13 +145,15 @@ const Search = (param) => {
             <div className="head-info">
               <div>
               {el.date}  기준 GDM 확률{" "}
-                <span style={{ color: "#FF8575" }}>{el.result}%</span> 로 예측됩니다.
+                <span style={{ color: "#FF8575" }}>{el.result}%</span> 로 예측됩니다. 
+                
               </div>
               <div onClick={(e) => onChangeVisible(key)}>
+              <span style={{ color: "#989898" , fontSize: 18, verticalAlign: "middle", alignItems: "right"}}>{el.ai_model_version}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <img
                   src={arrowIcon}
                   width="32px"
-                  style={{ transform: visible && "rotate(180deg)" }}
+                  style={{ transform: visible && "rotate(180deg)" , verticalAlign: "middle", alignItems: "right"}}
                 />
               </div>
             </div>
@@ -255,7 +257,11 @@ const Search = (param) => {
                       임신중인 아기의 수
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
-                      {el.twin_kind}명
+                      {el.twin_kind}
+                      {
+                        el.twin_kind !== '' ?
+                        " 명" : "-"
+                      }
                       </td>
                     </tr>
                     <tr align="center">
@@ -263,13 +269,23 @@ const Search = (param) => {
                       임신 전 키
                       </td>
                       <td width={"25%"} align="center">
-                      {el.mother_height}cm
+                      {
+                        el.mother_height !== '' ?
+                        el.mother_height + " cm" : "-"
+                      }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       체중(BMI)
                       </td>
                       <td width={"25%"} align="center">
-                      {el.mother_original_weight}kg({el.mother_original_bmi})
+                      {
+                        el.mother_original_weight !== '' ?
+                        el.mother_original_weight + " kg" : "-"
+                      }
+                      {
+                        el.mother_original_bmi !== ''  ?
+                        ' (' + el.mother_original_bmi + ')' : ''
+                      }
                       </td>
                     </tr>
                     <tr align="center">
@@ -277,13 +293,20 @@ const Search = (param) => {
                       혈압(MAP)
                       </td>
                       <td width={"25%"} align="center">
-                      {el.sbp}/{el.dbp} ({el.map})
+
+                      {
+                        el.sbp !== '' && el.dbp !== '' ?
+                        el.sbp + '/' + el.dbp + ' mmHg (' + el.map + ')' : '-'
+                      }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       맥박
                       </td>
                       <td width={"25%"} align="center">
-                      {el.hr}회
+                      {
+                        el.hr !== '' ?
+                        el.hr + ' 회': '-'
+                      }
                       </td>
                     </tr>
                     <tr align="center">
@@ -292,14 +315,17 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.smoking === "1" ? "Y" : (el.smoking === "0" ? "N":"모름")
+                        el.smoking === "1" ? "Y" : (el.smoking === "0" ? "N": (el.smoking === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       프로게스테론 질정 사용기간
                       </td>
                       <td width={"25%"} align="center">
-                        {el.vpg_dur}주
+                        {
+                          el.vpg_dur !== '' ?
+                          el.vpg_dur + ' 주' : '-'
+                        }
                       </td>
                     </tr>
                   </tbody>
@@ -323,13 +349,19 @@ const Search = (param) => {
                       생존아 수
                       </td>
                       <td width={"25%"} align="center">
-                        {el.survch}명
+                        {
+                          el.survch !== '' ?
+                          el.survch + ' 명' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       제왕절개 수술 횟수
                       </td>
                       <td width={"25%"} align="center">
-                      {el.csec}회
+                      {
+                          el.csec !== '' ?
+                          el.csec + ' 회' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -338,7 +370,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.prev_previa === "1" ? "Y" : (el.prev_previa === "0" ? "N":"모름")
+                        el.prev_previa === "1" ? "Y" : (el.prev_previa === "0" ? "N": (el.prev_previa === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -346,7 +378,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.prev_gest_dm === "1" ? "Y" : (el.prev_gest_dm === "0" ? "N":"모름")
+                        el.prev_gest_dm === "1" ? "Y" : (el.prev_gest_dm === "0" ? "N": (el.prev_gest_dm === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -356,7 +388,7 @@ const Search = (param) => {
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
                       {
-                        el.prev_lga === "1" ? "Y" : (el.prev_lga === "0" ? "N":"모름")
+                        el.prev_lga === "1" ? "Y" : (el.prev_lga === "0" ? "N": (el.prev_lga === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -384,7 +416,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.phx_cycle === "1" ? "Y" : (el.phx_cycle === "0" ? "N":"모름")
+                        el.phx_cycle === "1" ? "Y" : (el.phx_cycle === "0" ? "N": (el.phx_cycle === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -392,7 +424,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.hylipidc === "1" ? "Y" : (el.hylipidc === "0" ? "N":"모름")
+                        el.hylipidc === "1" ? "Y" : (el.hylipidc === "0" ? "N": (el.hylipidc === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -402,7 +434,7 @@ const Search = (param) => {
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
                       {
-                        el.igt === "1" ? "Y" : (el.igt === "0" ? "N":"모름")
+                        el.igt === "1" ? "Y" : (el.igt === "0" ? "N": (el.igt === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -412,10 +444,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.enoth === "1" ? "Y" : (el.enoth === "0" ? "N":"모름")
-                      }
-                      {
-                        el.enoth !== "1" ? "" : "/" + el.enoth_name
+                        el.enoth === "1" ? "Y" +  "/" + el.enoth_name : (el.enoth === "0" ? "N": (el.enoth === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -423,10 +452,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.adm_digest === "1" ? "Y" : (el.adm_digest === "0" ? "N":"모름")
-                      }
-                      {
-                        el.adm_digest === "1" ? "" : "/" + el.adm_digest_name
+                        el.adm_digest === "1" ? "Y" +  "/" + el.adm_digest_name : (el.adm_digest === "0" ? "N": (el.adm_digest === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -436,10 +462,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.adm_blood === "1" ? "Y" : (el.adm_blood === "0" ? "N":"모름")
-                      }
-                      {
-                        el.adm_blood !== "1" ? "" : "/"+el.adm_blood_name
+                        el.adm_blood === "1" ? "Y" +  "/" + el.adm_blood_name : (el.adm_blood === "0" ? "N": (el.adm_blood === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -447,13 +470,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.immune === "1" ? "Y" : (el.immune === "0" ? "N":"모름")
-                      }
-                      {
-                        el.immune !== "1" ? "" : "/"+el.immune_dur+"개월"
-                      }
-                      {
-                        el.immune !== "1" ? "" : "/" + el.immune_dur_name
+                        el.immune === "1" ? "Y" +  "/" + el.immune_dur+" 개월" + "/" + el.immune_dur_name : (el.immune === "0" ? "N": (el.immune === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -463,17 +480,17 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.phx_skin === "1" ? "Y" : (el.phx_skin === "0" ? "N":"모름")
-                      }
-                      {
-                        el.phx_skin !== "1" ? "" : "/" + el.phx_skin_name
+                        el.phx_skin === "1" ? "Y/" + el.phx_skin_name : (el.phx_skin === "0" ? "N": (el.phx_skin === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       자궁근종개수
                       </td>
                       <td width={"25%"} align="center">
-                      {el.myomano}개
+                      {
+                          el.myomano !== '' ?
+                          el.myomano + ' 개' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -481,8 +498,9 @@ const Search = (param) => {
                       다낭성 난소
                       </td>
                       <td width={"25%"} align="center">
+
                       {
-                        el.pcos === "1" ? "Y" : (el.pcos === "0" ? "N":"모름")
+                        el.pcos === "1" ? "Y" : (el.pcos === "0" ? "N": (el.pcos === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -490,7 +508,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.phx_ovarian === "1" ? "Y" : (el.phx_ovarian === "0" ? "N":"모름")
+                        el.phx_ovarian === "1" ? "Y" : (el.phx_ovarian === "0" ? "N": (el.phx_ovarian === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -517,7 +535,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.fhx_dm === "1" ? "Y" : (el.fhx_dm === "0" ? "N":"모름")
+                        el.fhx_dm === "1" ? "Y" : (el.fhx_dm === "0" ? "N": (el.fhx_dm === 'DK' ? '모름':'-' ))
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
@@ -525,7 +543,7 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.fhx_htm === "1" ? "Y" : (el.fhx_htm === "0" ? "N":"모름")
+                        el.fhx_htm === "1" ? "Y" : (el.fhx_htm === "0" ? "N": (el.fhx_htm === 'DK' ? '모름':'-' ))
                       }
                       </td>
                     </tr>
@@ -554,13 +572,19 @@ const Search = (param) => {
                       HB
                       </td>
                       <td width={"25%"} align="center">
-                      {el.hb}
+                      {
+                          el.hb !== '' ?
+                          el.hb + ' g/dl' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       WBC
                       </td>
                       <td width={"25%"} align="center">
-                      {el.wbc}
+                      {
+                          el.wbc !== '' ?
+                          el.wbc + ' 10⁹/L' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -568,13 +592,19 @@ const Search = (param) => {
                       HCT
                       </td>
                       <td width={"25%"} align="center">
-                      {el.hct}
+                      {
+                          el.hct !== '' ?
+                          el.hct + ' %' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       PLT
                       </td>
                       <td width={"25%"} align="center">
-                      {el.plt}
+                      {
+                          el.plt !== '' ?
+                          el.plt + ' 10⁹/L' : '-'
+                        }
                       </td>
                     </tr>
                   </tbody>
@@ -602,13 +632,19 @@ const Search = (param) => {
                       GFR
                       </td>
                       <td width={"25%"} align="center">
-                      {el.gfr}
+                      {
+                          el.gfr !== '' ?
+                          el.gfr + ' mg/dL' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       Total cholesterol
                       </td>
                       <td width={"25%"} align="center">
-                      {el.tc}
+                      {
+                          el.tc !== '' ?
+                          el.tc + ' mg/dL' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -616,7 +652,10 @@ const Search = (param) => {
                       Cholesterol
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
-                      {el.hdl}
+                      {
+                          el.hdl !== '' ?
+                          el.hdl + ' mg/dL' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -624,13 +663,19 @@ const Search = (param) => {
                       AST
                       </td>
                       <td width={"25%"} align="center">
-                      {el.ast}
+                      {
+                          el.ast !== '' ?
+                          el.ast + ' U/L' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       ALT
                       </td>
                       <td width={"25%"} align="center">
-                      {el.alt}
+                      {
+                          el.alt !== '' ?
+                          el.alt + ' U/L' : '-'
+                        }
                       </td>
                     </tr>
                   </tbody>
@@ -656,13 +701,19 @@ const Search = (param) => {
                       FBS
                       </td>
                       <td width={"25%"} align="center">
-                      {el.fasting_100}
+                      {
+                          el.fasting_100 !== '' ?
+                          el.fasting_100 + ' mg/dL' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       50g GTT
                       </td>
                       <td width={"25%"} align="center">
-                      {el.ogtt_50}
+                      {
+                          el.ogtt_50 !== '' ?
+                          el.ogtt_50 + ' mg/dL' : '-'
+                        }
                       </td>
                     </tr>
                     <tr align="center">
@@ -670,13 +721,19 @@ const Search = (param) => {
                       Randome glucose
                       </td>
                       <td width={"25%"} align="center">
-                      {el.glucose}
+                      {
+                          el.glucose !== '' ?
+                          el.glucose + ' mg/dL' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       HbA1C 
                       </td>
                       <td width={"25%"} align="center">
-                      {el.hba1c}
+                      {
+                          el.hba1c !== '' ?
+                          el.hba1c + ' %' : '-'
+                        }
                       </td>
                     </tr>
                   </tbody>
@@ -704,13 +761,19 @@ const Search = (param) => {
                       hCG
                       </td>
                       <td width={"25%"} align="center">
-                      {el.hcg}
+                      {
+                          el.hcg !== '' ?
+                          el.hcg + ' MoM' : '-'
+                        }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
                       PAPP-A
                       </td>
                       <td width={"25%"} align="center">
-                      {el.pappa}
+                      {
+                          el.pappa !== '' ?
+                          el.pappa + ' MoM' : '-'
+                        }
                       </td>
                     </tr>
                   </tbody>

@@ -178,8 +178,8 @@ const [pltMsg, setPltMsg] = React.useState("");
   // 경산모 항목
   const [ survch, setSurvch] = React.useState("");                                // 생존아 수
   const [ csec, setCsec] = React.useState("");                                    // 제왕절개 수술 횟수
-  const [ prevPrevia, setPrevPrevia] = React.useState("");                        // 전치태반
-  const [ prevGestDm, setPrevGestDm] = React.useState("");                        // 이전 임신 임신성 당뇨 과거력
+  const [ prevPrevia, setPrevPrevia] = React.useState(null);                        // 전치태반
+  const [ prevGestDm, setPrevGestDm] = React.useState(null);                        // 이전 임신 임신성 당뇨 과거력
   const [ prevLga, setPrevLga] = React.useState("");                              // 거대아 분만력
 
 
@@ -718,8 +718,8 @@ const [pltMsg, setPltMsg] = React.useState("");
   const onChangeSmoking = (e) => {
     onChangeButtonState('smoking', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
-    setSmoking(value);  // Y, N, null ('모름'일 경우 null값을 넣음.)
+    const value = e.target.value;
+    setSmoking(value);  // Y, N, DK, null (yes, no, 모름, 미입력)
   }
 
 
@@ -1074,7 +1074,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('prevGestDm', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setPrevGestDm(value); // Y, N, null ('모름'일 경우 null값을 넣음.)
   }
 
@@ -1090,7 +1091,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('prevLga', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setPrevLga(value);
   }
 
@@ -1105,7 +1107,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('phxCycle', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setPhxCycle(value);
   }
 
@@ -1121,7 +1124,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('igt', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setIgt(value);
   }
 
@@ -1137,7 +1141,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('hylipidc', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setHylipidc(value);
   }
 
@@ -1153,12 +1158,13 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('enoth', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     
 
     if(value === '1'){
       document.getElementById('enothName').disabled = false;
-    }else if(value === '0' || value === null){
+    }else if(value === '0' || value === 'DK'){
       setEnothName("");
       document.getElementById('enothName').disabled = true;
     }else{}
@@ -1188,12 +1194,12 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('admDigest', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
-    
+    //const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
 
     if(value === '1'){
       document.getElementById('admDigestName').disabled = false;
-    }else if(value === '0' || value === null){
+    }else if(value === '0' || value === 'DK'){
       setAdmDigestName("");
       document.getElementById('admDigestName').disabled = true;
     }else{}
@@ -1221,11 +1227,12 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('admBlood', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     
     if(value === '1'){
       document.getElementById('admBloodName').disabled = false;
-    }else if(value === '0' || value === null){
+    }else if(value === '0' || value === 'DK'){
       setAdmBloodName("");
       document.getElementById('admBloodName').disabled = true;
     }else{}
@@ -1255,11 +1262,12 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('phxSkin', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     
     if(value === '1'){
       document.getElementById('phxSkinName').disabled = false;
-    }else if(value === '0' || value === null){
+    }else if(value === '0' || value === 'DK'){
       setPhxSkinName("");
       document.getElementById('phxSkinName').disabled = true;
     }else{}
@@ -1314,7 +1322,8 @@ const [pltMsg, setPltMsg] = React.useState("");
       // 클릭한 버튼에 따라 on/off 스타일 변경
       onChangeButtonState('pcos', e.target);
   
-      const value = (e.target.value === 'DK' ? null:e.target.value);
+      // const value = (e.target.value === 'DK' ? null:e.target.value);
+      const value = e.target.value;
       setAdmBlood(value);
     }
 
@@ -1330,7 +1339,8 @@ const [pltMsg, setPltMsg] = React.useState("");
       // 클릭한 버튼에 따라 on/off 스타일 변경
       onChangeButtonState('phxOvarian', e.target);
   
-      const value = (e.target.value === 'DK' ? null:e.target.value);
+      // const value = (e.target.value === 'DK' ? null:e.target.value);
+      const value = e.target.value;
       setPhxOvarian(value);
     }
 
@@ -1346,7 +1356,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('fhxDm', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setFhxDm(value);
   }
 
@@ -1355,14 +1366,15 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
   /**
-   * 당뇨
+   * 고혈압
    * @param {*} e 
    */
    const onChangeFhxHtm = (e) => {
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('fhxHtm', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    // const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setFhxHtm(value);
   }
 
@@ -1769,6 +1781,7 @@ const [pltMsg, setPltMsg] = React.useState("");
    * @param {*} value : 
    */
   const checkData = async(value) => {
+    console.log('E0M1 :' + value); 
 
     if(value === 'E0'){
 
@@ -1860,26 +1873,26 @@ const [pltMsg, setPltMsg] = React.useState("");
           dbp: Number(dbp),
           hr: Number(hr),
           map: Number(map),
-          smoking: Number(smoking),
-          fhxDm: Number(fhxDm),
-          fhxHtn: Number(fhxHtm),
-          phxCycle: Number(phxCycle),
-          pcos: Number(pcos),
-          igt: Number(igt),
-          hyperlipidemia: Number(hylipidc),
-          enoth: Number(enoth),
-          admBlood: Number(admBlood),
-          admDigest: Number(admDigest),
-          phxOvarian: Number(phxOvarian),
-          phxSkin: Number(phxSkin),
-          immuneDur: Number(immuneDur),
+          smoking: smoking === 'DK' ?  null : Number(smoking),
+          fhxDm: fhxDm === 'DK' ?  null : Number(fhxDm), // Number(fhxDm),
+          fhxHtn: fhxHtm === 'DK' ?  null : Number(fhxHtm), // Number(fhxHtm),
+          phxCycle: phxCycle === 'DK' ?  null : Number(phxCycle), //Number(phxCycle),
+          pcos: pcos === 'DK' ?  null : Number(pcos), // Number(pcos),
+          igt: igt === 'DK' ?  null : Number(igt),//Number(igt),
+          hyperlipidemia: hylipidc === 'DK' ?  null : Number(hylipidc), //Number(hylipidc),
+          enoth: enoth === 'DK' ?  null : Number(enoth), //Number(enoth),
+          admBlood: admBlood === 'DK' ?  null : Number(admBlood), //Number(admBlood),
+          admDigest: admDigest === 'DK' ?  null : Number(admDigest), // Number(admDigest),
+          phxOvarian: phxOvarian === 'DK' ?  null : Number(phxOvarian), // Number(phxOvarian),
+          phxSkin: phxSkin === 'DK' ?  null : Number(phxSkin), // Number(phxSkin),
+          immuneDur: immuneDur ===  null || immuneDur === '' ? 0 : Number(immuneDur),
           myomano: Number(myomano),
           survch: Number(survch),
-          prevGestDm: Number(prevGestDm),
+          prevGestDm: prevGestDm === 'DK' ?  null : Number(prevGestDm), //Number(prevGestDm),
           csec: Number(csec),
           pbmh: Number(pbmh),
-          prevPrevia: Number(prevPrevia),
-          prevLga: Number(prevLga),
+          prevPrevia: prevPrevia === 'DK' ?  null : Number(prevPrevia), //Number(prevPrevia),
+          prevLga: prevLga === 'DK' ?  null : Number(prevLga), //Number(prevLga),
           ftpn: Number(ftpn),
           wbc: Number(wbc),
           hb: Number(hb),
@@ -1901,7 +1914,10 @@ const [pltMsg, setPltMsg] = React.useState("");
 
         console.log(data);
 
+  
+
         let result = null;
+        let version = null;
         const headers = {
           "Content-type": "application/json",
           "authKey": "6c65b545-175a-461b-baff-ca97118b102a",
@@ -1910,8 +1926,9 @@ const [pltMsg, setPltMsg] = React.useState("");
           .post(INNERWARE_SERVER, data, { headers })
           .then(function (response) {
             console.log('prediction :' + response.data.prediction);
-            result =  response.data.prediction;
-             saveData(result);
+            result =  response.data.prediction.toFixed();
+            version = response.data.modelVersion;
+             saveData(result, version);
           })
           .catch(function (error) {
             console.log(error);
@@ -1924,27 +1941,13 @@ const [pltMsg, setPltMsg] = React.useState("");
           // 저장하기 끝
 
 
-
-        //   }else focus("PLT를 확인하세요", getObject("plt"));
-        
-
-        // }else focus("HCT를 확인하세요", getObject("hct"));
-
-
-        
-      //}else focus("HB를 확인하세요", getObject("hb"));
-  
-             
-  
-    // }else focus("WBC를 확인하세요", getObject("wbc"));
-
-
    
   
   }
 
   // db에 데이터 저장하기
-  const saveData = async(apiResult) => {
+  const saveData = async(apiResult, apiAiVersion) => {
+    console.log('======================== saveData');
       const data = {
           date : date,
           hospital: hospital ,
@@ -2010,10 +2013,12 @@ const [pltMsg, setPltMsg] = React.useState("");
           hcg: hcg,
           pappa: pappa,
           result: apiResult,
-          delete_yn: 0
+          delete_yn: 0,
+          ai_model_version: apiAiVersion
       };
 
-      // console.log(data);
+       console.log(data);
+
 
       await axios
         .post(GDM_SERVER + "/add", data)
@@ -2047,8 +2052,11 @@ const [pltMsg, setPltMsg] = React.useState("");
       // * 예측하기
       // 경산모 필수 항목 체크 : 출산횟수가 2회 이상이면서 경산모 필수입력항목 기재가 누락된 경우.
       if(birthCnt > 1) if(!checkMultiparousData()) checkVal = false;
-      else if(! await checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
-      else if( // 기본하위항목 중 필수 항목 체크
+      
+      // 기본항목을 제외한 항목 체크
+      if(! await checkData( isE0 ===  true ? 'E0' : 'M1')) checkVal = false;
+      
+      if( // 기본하위항목 중 필수 항목 체크
             motherOriginalWeight === ''
             || motherHeight === ""
             || motherOriginalBmi === ''
@@ -2437,7 +2445,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 id="smokingDK" 
                 onClick={onChangeSmoking}
                 className={
-                  smoking === null
+                  smoking === 'DK'
                   ? "active" : ""
                 }
               > 모름
@@ -2542,7 +2550,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 name="prevPrevia" 
                 onClick={onChangePrevPrevia}
                 className={
-                  prevPrevia === null
+                  prevPrevia === 'DK'
                   ? "active" : ""
                 }
               > 모름
@@ -2584,7 +2592,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 name="prevGestDm" 
                 onClick={onChangePrevGest}
                 className={
-                  prevGestDm === null
+                  prevGestDm === 'DK'
                   ? "active" : ""
                 }
               > 모름
@@ -2626,7 +2634,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 name="prevLga" 
                 onClick={onChangePrevLga}
                 className={
-                  prevLga === null 
+                  prevLga === 'DK' 
                   ? "active" : ""
                 }
               > 모름
@@ -2684,7 +2692,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="phxCycleDK" 
               onClick={onChangePhxCycle}
               className={
-                phxCycle === null
+                phxCycle === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2725,7 +2733,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="igtDK" 
               onClick={onChangeIgt}
               className={
-                igt === null
+                igt === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2766,7 +2774,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="hylipidcDK" 
               onClick={onChangeHylipidc}
               className={
-                hylipidc === null
+                hylipidc === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2806,7 +2814,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="enothDK"
               onClick={onChangeEnoth} 
               className={
-                enoth === null
+                enoth === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2819,7 +2827,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 onChange={onChangeEnothName}
                 placeholder="질환명을 입력해주세요"
                 disabled= {
-                  (enoth === "0" || enoth === null) ? true:false
+                  (enoth === "0" || enoth === null || enoth === 'DK') ? true:false
                 }
               />
           </div>
@@ -2859,7 +2867,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="admDigestDK" 
               onClick={onChangeAdmDigest}
               className={
-                admDigest === null
+                admDigest === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2871,7 +2879,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 onChange={onChangeAdmDigestName}
                 placeholder="질환명을 입력해주세요"
                 disabled= {
-                  (admDigest === "0" || admDigest === null) ? true:false
+                  (admDigest === "0" || admDigest === null || admDigest === 'DK') ? true:false
                 }
               />
           </div>
@@ -2910,7 +2918,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="admBloodDK" 
               onClick={onChangeAdmBlood}
               className={
-                admBlood === null
+                admBlood === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2922,7 +2930,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 onChange={onChangeAdmBloodName}
                 placeholder="질환명을 입력해주세요"
                 disabled= {
-                  (admBlood === "0" || admBlood === null) ? true:false
+                  (admBlood === "0" || admBlood === null || admBlood === 'DK') ? true:false
                 }
               />
           </div>
@@ -2964,7 +2972,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="immuneDK" 
               onClick={onChangeImmune}
               className={
-                immune === null
+                immune === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -2978,7 +2986,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 type="number"
                 style={{ width: "75px" }}
                 disabled= {
-                  (immune === "0" || immune === null) ? true:false
+                  (immune === "0" || immune === null || immune === 'DK') ? true:false
                 }
 
               />
@@ -2991,7 +2999,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 placeholder="질환명을 입력해주세요"
                 style={{ width: "200px" }}
                 disabled= {
-                  (immune === "0" || immune === null) ? true:false
+                  (immune === "0" || immune === null || immune === 'DK') ? true:false
                 }
               />
           </div>
@@ -3033,7 +3041,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="phxSkinDK" 
               onClick={onChangePhxSkin}
               className={
-                phxSkin === null
+                phxSkin === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -3045,7 +3053,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 onChange={onChangePhxSkinName}
                 placeholder="질환명을 입력해주세요"
                 disabled= {
-                  (phxSkin === "0" || phxSkin === null) ? true:false
+                  (phxSkin === "0" || phxSkin === null || phxSkin === 'DK') ? true:false
                 }
               />
           </div>
@@ -3104,7 +3112,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="pcosDK" 
               onClick={onChangePcos}
               className={
-                pcos === null
+                pcos === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -3145,7 +3153,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="phxOvarianDK" 
               onClick={onChangePhxOvarian}
               className={
-                phxOvarian === null
+                phxOvarian === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -3199,7 +3207,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="fhxDmDK" 
               onClick={onChangeFhxDm}
               className={
-                fhxDm === null
+                fhxDm === 'DK'
                 ? "active" : ""
               }
             > 모름
@@ -3242,7 +3250,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="fhxHtmDK" 
               onClick={onChangeFhxHtm}
               className={
-                fhxHtm === null
+                fhxHtm === 'DK'
                 ? "active" : ""
               }
             > 모름
