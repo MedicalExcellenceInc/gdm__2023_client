@@ -1706,7 +1706,7 @@ const [pltMsg, setPltMsg] = React.useState("");
    * 기본 필수항목 상단의항목을 모두 기입해야, 하단의 예측하기 버튼이 활성화 됨.
    * @returns true or false
    */
-  const checkBasicData = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map   ) => {
+  const checkBasicData = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt   ) => {
       // 항목 입력 여부 확인
       if(date === ""
         || hospital === ""
@@ -1753,8 +1753,8 @@ const [pltMsg, setPltMsg] = React.useState("");
  * @param {*} dbp 
  * @param {*} map 
  */
-  const onChangePrevBtnDiv = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map) => {
-    if(checkBasicData(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, motherOriginalWeight, motherHeight, motherOriginalBmi, sbp, dbp, map)) document.getElementById("prevBtnDiv").style.display = 'block';
+  const onChangePrevBtnDiv = (date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt) => {
+    if(checkBasicData(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt)) document.getElementById("prevBtnDiv").style.display = 'block';
     else {
       document.getElementById("prevBtnDiv").style.display = 'none';
       document.getElementById("prevBtnDiv").style.alignItems = 'center';
@@ -2044,7 +2044,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       let checkVal = true;
 
       // 기본 필수 항목 체크
-      if(!checkBasicData()) {
+      if(!checkBasicData(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt)) {
         alert("기본정보 필수 입력항목을 확인하세요.");
       }else{
 
