@@ -198,7 +198,7 @@ const [pltMsg, setPltMsg] = React.useState("");
   const [ immuneDurName, setImmuneDurName] = React.useState("");                  // 면역질환 과거력(질환명)
   const [ phxSkin, setPhxSkin] = React.useState("");                              // 피부질환 과거력 여부 (Y, N, DK)
   const [ phxSkinName, setPhxSkinName] = React.useState("");                      // 피부질환명
-  const [ myomano, setMyomano] = React.useState("");                              // 자궁근종개수
+  const [ myomano, setMyomano] = React.useState(0);                              // 자궁근종개수
   const [ pcos, setPcos] = React.useState("");                                    // 다낭성난소
   const [ phxOvarian, setPhxOvarian] = React.useState("");                        // 난소 혹 진단과거력
 
@@ -1909,7 +1909,7 @@ const [pltMsg, setPltMsg] = React.useState("");
           hcg: Number(hcg),
           _50g: Number(ogtt50),
           gfr: Number(gfr),
-          vpgDur:Number(vpgDur)
+          vpgDur: vpgDur === '' || vpgDur=== null ? 0:Number(vpgDur)
         }// apiData
 
         console.log(data);
