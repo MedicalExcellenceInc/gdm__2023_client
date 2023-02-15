@@ -24,6 +24,22 @@ const getFormatDate= (date) => {
 
 
 /**
+ * 00개월 수를 넣으면 0년 0개월로 반환함.
+ * @param {*} value 
+ */
+const getYearMonth = (months) => {
+    const value = Number(months);
+    const year = Math.floor(value/12); // 나누기 몫
+    const month = value%12; // 나머지값
+
+    return {
+      "year": year,
+      "month": month
+    }
+}
+
+
+/**
  * 소수점 입력했을때 점 빼고 앞 숫자만 리턴.
  * @param {*} value 
  */
@@ -195,10 +211,12 @@ const [pltMsg, setPltMsg] = React.useState("");
   const [ admBloodName, setAdmBloodName] = React.useState("");                    // 혈액질환명
   const [ immune, setImmune] = React.useState("");                                // 면역질환 여부 (Y, N, DK)
   const [ immuneDur, setImmuneDur] = React.useState("");                          // 면역질환 과거력(기간)
+  const [ immuneDurYear, setImmuneDurYear] = React.useState("");                  // 면역질환 과거력(기간 - year)
+  const [ immuneDurMonth, setImmuneDurMonth] = React.useState("");                // 면역질환 과거력(기간 - month)
   const [ immuneDurName, setImmuneDurName] = React.useState("");                  // 면역질환 과거력(질환명)
   const [ phxSkin, setPhxSkin] = React.useState("");                              // 피부질환 과거력 여부 (Y, N, DK)
   const [ phxSkinName, setPhxSkinName] = React.useState("");                      // 피부질환명
-  const [ myomano, setMyomano] = React.useState(0);                              // 자궁근종개수
+  const [ myomano, setMyomano] = React.useState("");                              // 자궁근종개수
   const [ pcos, setPcos] = React.useState("");                                    // 다낭성난소
   const [ phxOvarian, setPhxOvarian] = React.useState("");                        // 난소 혹 진단과거력
 
@@ -356,13 +374,16 @@ const [pltMsg, setPltMsg] = React.useState("");
       const value = (e.target.value === 'DK' ? null:e.target.value);
 
       if(value === '1'){
-        document.getElementById('immuneDur').disabled = false;
+        document.getElementById('immuneDurYear').disabled = false;
+        document.getElementById('immuneDurMonth').disabled = false;
         document.getElementById('immuneDurName').disabled = false;
       }else if(value === '0' || value === null){
-        setImmuneDur("0");
+        setImmuneDurYear("");
+        setImmuneDurMonth("");
         setImmuneDurName("");
 
-        document.getElementById('immuneDur').disabled = true;
+        document.getElementById('immuneDurYear').disabled = true;
+        document.getElementById('immuneDurMonth').disabled = true;
         document.getElementById('immuneDurName').disabled = true;
       }else {}
 
@@ -375,14 +396,30 @@ const [pltMsg, setPltMsg] = React.useState("");
    * 면역질환 (기간, 개월 수)
    * @param {*} e 
    */
-  const onChangeImmuneDur = (e) =>{
+  const onChangeImmuneDurYear = (e) =>{
     const value  = trim(e.target.value);
     
     if(value !== ''){
-      if(checkNumberRage(value, 1, 12)) setImmuneDur(value);
-      else {focus("1~12 사이 정수만 입력해 주세요.", getObject("immuneDur"));}
-    }else setImmuneDur(value);
+      if(checkNumberRage(value, 0, 20)) setImmuneDurYear(value);
+      else {focus("1~12 사이 정수만 입력해 주세요.", getObject("immuneDurYear"));}
+    }else setImmuneDurYear(value);
   }
+
+
+
+    /**
+   * 면역질환 (기간, 개월 수)
+   * @param {*} e 
+   */
+     const onChangeImmuneDurMonth = (e) =>{
+      const value  = trim(e.target.value);
+      
+      if(value !== ''){
+        if(checkNumberRage(value, 0, 12)) setImmuneDurMonth(value);
+        else {focus("1~12 사이 정수만 입력해 주세요.", getObject("immuneDurMonth"));}
+      }else setImmuneDurMonth(value);
+    }
+
 
 
 
@@ -486,6 +523,8 @@ const [pltMsg, setPltMsg] = React.useState("");
           setAdmBloodName(data.adm_blood_name);
           setImmune(data.immune);
           setImmuneDur(data.immune_dur);
+          setImmuneDurYear(getYearMonth(data.immune_dur).year);
+          setImmuneDurMonth(getYearMonth(data.immune_dur).month);
           setImmuneDurName(data.immune_dur_name);
           setPhxSkin(data.phx_skin);
           setPhxSkinName(data.phx_skin_name);
@@ -820,6 +859,12 @@ const [pltMsg, setPltMsg] = React.useState("");
         if(!calculatePreg(value, ftpn, pbmh, naturalMcCnt, artificialMcCnt, "gestCnt" )) 
           setGestCnt("");
         else {
+          // 과거 임신횟수가 1이상임에도 생존아수가 0명이면 alert.
+          if(Number(survch) === 0 && Number(value) > 0){
+            // eslint-disable-next-line no-restricted-globals
+            alert("과거 임신 횟수가 "+ value+"회 이상, 생존아수가 0명입니다. 예측 진행 이전에 다시한번 검토해주세요!");
+          }
+
           setGestCnt(value);
 
           // 예측하기 버튼 노출여부 변경
@@ -831,6 +876,13 @@ const [pltMsg, setPltMsg] = React.useState("");
         //setGestCnt(value);
       }
     }else {
+      
+      // 과거 임신횟수가 1이상임에도 생존아수가 0명이면 alert.
+      if(Number(survch) === 0 && Number(value) > 0){
+        // eslint-disable-next-line no-restricted-globals
+        alert("과거 임신 횟수가 "+ value+"회 이상, 생존아수가 0명입니다. 예측 진행 이전에 다시한번 검토해주세요!");
+      }
+
       setGestCnt(value);
       onChangePrevBtnDiv(date, hospital, idCode, motherAge, crntGestWeeksW, crntGestWeeksD, edc, value, ftpn, pbmh, naturalMcCnt, artificialMcCnt);
     }
@@ -1023,8 +1075,6 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
     const totalGestCnt = nFtpn + nPbmh + nNaturalMcCnt + nArtificialMcCnt;
-    console.log('totalGestCnt : ' + totalGestCnt);
-    console.log('nGestCnt : ' + nGestCnt);
     if(nGestCnt < totalGestCnt) {
       focus("만삭분만횟수, 조산횟수, 유산횟수의 합이 과거임신횟수보다 많을 수 없습니다.", getObject(objectId));
       return false;
@@ -1044,7 +1094,16 @@ const [pltMsg, setPltMsg] = React.useState("");
     
     if(value !== ''){
       const nValue = Number(value);
-      if(checkNumberRage(nValue, 0, 20)) setSurvch(nValue);
+      if(checkNumberRage(nValue, 0, 20)) {
+
+        // 과거 임신횟수가 1이상임에도 생존아수가 0명이면 alert.
+        if(nValue === 0 && gestCnt > 0){
+          // eslint-disable-next-line no-restricted-globals
+          alert("과거 임신 횟수가 "+ gestCnt+"회 이상, 생존아수가 0명입니다. 예측 진행 이전에 다시한번 검토해주세요!");
+        }
+
+        setSurvch(nValue);
+      }
       else {focus("0~20 사이 정수만 입력해 주세요.", getObject("survch"));}
     }else setSurvch(getOnlyNumber(value));
   }
@@ -1320,13 +1379,9 @@ const [pltMsg, setPltMsg] = React.useState("");
     const value  = trim(e.target.value);
     
     if(value !== ''){
-      if(gestCnt === ''){
-        focus("임신횟수를 먼저 입력하세요.", getObject("gestCnt"));
-      }else{
-        // 자궁근종개수는 임신횟수 이상값을 가질 수 없음.
-        if(checkNumberRage(value, 0, gestCnt)) setMyomano(value);
-        else {focus("정수만 입력해 주세요.", getObject("myomano"));}
-      }
+      // 자궁근종개수는 0~99
+      if(checkNumberRage(value, 0, 99)) setMyomano(value);
+      else {focus("정수만 입력해 주세요.", getObject("myomano"));}
       
     }else setMyomano(value);
   }
@@ -1880,114 +1935,110 @@ const [pltMsg, setPltMsg] = React.useState("");
    */
   const getResult = async() => {
     console.log('getResult ================');
-    
-    // HB, WBC는 0.x식의 값을 입력받으므로 1이하의 값을 넣으면 실시간 check는 불가능함.
-    // 저장 직전에 validation값 체크를 더 해줌.
-    // if(checkNumberRage(wbc, 0.01, 50.00)) {
-    //   setWbc(checkNumberPoint(wbc, 2));
-
-      // if(checkNumberRage(hb, 0.1, 25.0)) {
-      //   setHb(checkNumberPoint(hb, 1));
-
-        // if(checkNumberRage(hct, 20.0, 80.0)) {
-        //   setHct(checkNumberPoint(hct, 1));
-
-          // if(checkNumberRage(plt, 2.0, 1000)) {
-          //   setPlt(checkNumberPoint(plt, 1));
-
-
-              // 저장하기
-        const data = {
-          date : date,
-          instcd: hospital,
-          rid: idCode,
-          age: Number(motherAge),
-          gaw : Number(crntGestWeeksW), // api연동시에는 임신주수(주)만 보냄.
-          twinKind: Number(twinKind),
-          wt: Number(motherOriginalWeight),
-          ht: Number(motherHeight),
-          bmi: Number(motherOriginalBmi),
-          g: Number(gestCnt),
-          a: Number(naturalMcCnt) + Number(artificialMcCnt),
-          p: Number(ftpn) + Number(pbmh),
-          sbp: Number(sbp),
-          dbp: Number(dbp),
-          hr: Number(hr),
-          map: Number(map),
-          smoking: smoking === 'DK' ?  null : Number(smoking),
-          fhxDm: fhxDm === 'DK' ?  null : Number(fhxDm), // Number(fhxDm),
-          fhxHtn: fhxHtm === 'DK' ?  null : Number(fhxHtm), // Number(fhxHtm),
-          phxCycle: phxCycle === 'DK' ?  null : Number(phxCycle), //Number(phxCycle),
-          pcos: pcos === 'DK' ?  null : Number(pcos), // Number(pcos),
-          igt: igt === 'DK' ?  null : Number(igt),//Number(igt),
-          hyperlipidemia: hylipidc === 'DK' ?  null : Number(hylipidc), //Number(hylipidc),
-          enoth: enoth === 'DK' ?  null : Number(enoth), //Number(enoth),
-          admBlood: admBlood === 'DK' ?  null : Number(admBlood), //Number(admBlood),
-          admDigest: admDigest === 'DK' ?  null : Number(admDigest), // Number(admDigest),
-          phxOvarian: phxOvarian === 'DK' ?  null : Number(phxOvarian), // Number(phxOvarian),
-          phxSkin: phxSkin === 'DK' ?  null : Number(phxSkin), // Number(phxSkin),
-          immuneDur: immuneDur ===  null || immuneDur === '' ? 0 : Number(immuneDur),
-          myomano: myomano === '' || myomano === null ? 0 : Number(myomano),
-          survch: Number(survch),
-          prevGestDm: prevGestDm === 'DK' ?  null : Number(prevGestDm), //Number(prevGestDm),
-          csec: Number(csec),
-          pbmh: Number(pbmh),
-          prevPrevia: prevPrevia === 'DK' ?  null : Number(prevPrevia), //Number(prevPrevia),
-          prevLga: prevLga === 'DK' ?  null : Number(prevLga), //Number(prevLga),
-          ftpn: Number(ftpn),
-          wbc: Number(wbc),
-          hb: Number(hb),
-          hct: Number(hct),
-          plt: Number(plt),
-          tc: Number(tc),
-          hdl: Number(hdl),
-          alt: Number(alt),
-          ast: Number(ast),
-          _100gF: Number(fasting100),
-          glu: Number(glucose),
-          hba1c: Number(hba1c),
-          pappa: Number(pappa),
-          hcg: Number(hcg),
-          _50g: Number(ogtt50),
-          gfr: Number(gfr),
-          vpgDur: vpgDur === '' || vpgDur=== null ? 0:Number(vpgDur)
-        }// apiData
-
-        console.log(data);
-
   
+    // 과거력 - 면역질환 기간에서 0년 0개월을 00개월로 변환하여 저장함.
+    // 둘 중 값이 없을 시 0값으로 처리함.
+    let immuneDurYearTemp = immuneDurYear;
+    let immuneDurMonthTemp = immuneDurMonth;
+    if(immuneDurYear === '' || immuneDurYear === null) immuneDurYearTemp = 0;
+    if(immuneDurMonth === '' || immuneDurMonth === null) immuneDurMonthTemp = 0;
 
-        let result = null;
-        let version = null;
-        const headers = {
-          "Content-type": "application/json",
-          "authKey": "6c65b545-175a-461b-baff-ca97118b102a",
-        };
-        await axios
-          .post(INNERWARE_SERVER, data, { headers })
-          .then(function (response) {
-            console.log('prediction :' + response.data.prediction);
-            result =  response.data.prediction;
-            version = response.data.modelVersion;
-             saveData(Number(result).toFixed(), version);
-          })
-          .catch(function (error) {
-            console.log(error);
-            alert(
-              error + " : GDM API연동 오류입니다. 확인 후 다시 저장하세요."
-            );
-            return ;
-          });  
-
-          // 저장하기 끝
+    const immuneDurTemp = (12 * Number(immuneDurYearTemp) ) + Number(immuneDurMonthTemp);
+    setImmuneDur(immuneDurTemp);
 
 
-   
+    // 저장하기
+    const data = {
+      date : date,
+      instcd: hospital,
+      rid: idCode,
+      age: Number(motherAge),
+      gaw : Number(crntGestWeeksW), // api연동시에는 임신주수(주)만 보냄.
+      twinKind: Number(twinKind),
+      wt: Number(motherOriginalWeight),
+      ht: Number(motherHeight),
+      bmi: Number(motherOriginalBmi),
+      g: Number(gestCnt),
+      a: Number(naturalMcCnt) + Number(artificialMcCnt),
+      p: Number(ftpn) + Number(pbmh),
+      sbp: Number(sbp),
+      dbp: Number(dbp),
+      hr: Number(hr),
+      map: Number(map),
+      smoking: smoking === 'DK' ?  null : Number(smoking),
+      fhxDm: fhxDm === 'DK' ?  null : Number(fhxDm), // Number(fhxDm),
+      fhxHtn: fhxHtm === 'DK' ?  null : Number(fhxHtm), // Number(fhxHtm),
+      phxCycle: phxCycle === 'DK' ?  null : Number(phxCycle), //Number(phxCycle),
+      pcos: pcos === 'DK' ?  null : Number(pcos), // Number(pcos),
+      igt: igt === 'DK' ?  null : Number(igt),//Number(igt),
+      hyperlipidemia: hylipidc === 'DK' ?  null : Number(hylipidc), //Number(hylipidc),
+      enoth: enoth === 'DK' ?  null : Number(enoth), //Number(enoth),
+      admBlood: admBlood === 'DK' ?  null : Number(admBlood), //Number(admBlood),
+      admDigest: admDigest === 'DK' ?  null : Number(admDigest), // Number(admDigest),
+      phxOvarian: phxOvarian === 'DK' ?  null : Number(phxOvarian), // Number(phxOvarian),
+      phxSkin: phxSkin === 'DK' ?  null : Number(phxSkin), // Number(phxSkin),
+      immuneDur: immuneDurTemp, // 0년 0개월을 00개월수로 변환하여 저장함.
+      myomano: myomano === '' || myomano === null ? 0 : Number(myomano),
+      survch: Number(survch),
+      prevGestDm: prevGestDm === 'DK' ?  null : Number(prevGestDm), //Number(prevGestDm),
+      csec: Number(csec),
+      pbmh: Number(pbmh),
+      prevPrevia: prevPrevia === 'DK' ?  null : Number(prevPrevia), //Number(prevPrevia),
+      prevLga: prevLga === 'DK' ?  null : Number(prevLga), //Number(prevLga),
+      ftpn: Number(ftpn),
+      wbc: Number(wbc),
+      hb: Number(hb),
+      hct: Number(hct),
+      plt: Number(plt),
+      tc: Number(tc),
+      hdl: Number(hdl),
+      alt: Number(alt),
+      ast: Number(ast),
+      _100gF: Number(fasting100),
+      glu: Number(glucose),
+      hba1c: Number(hba1c),
+      pappa: Number(pappa),
+      hcg: Number(hcg),
+      _50g: Number(ogtt50),
+      gfr: Number(gfr),
+      vpgDur: vpgDur === '' || vpgDur=== null ? 0:Number(vpgDur)
+    }// apiData
+
+    console.log(data);
+
+
+
+    let result = null;
+    let version = null;
+    const headers = {
+      "Content-type": "application/json",
+      "authKey": "6c65b545-175a-461b-baff-ca97118b102a",
+    };
+    await axios
+      .post(INNERWARE_SERVER, data, { headers })
+      .then(function (response) {
+        console.log('prediction :' + response.data.prediction);
+        result =  response.data.prediction;
+        version = response.data.modelVersion;
+          saveData(Number(result).toFixed(), version, immuneDurTemp);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert(
+          error + " : GDM API연동 오류입니다. 확인 후 다시 저장하세요."
+        );
+        return ;
+      });  
+
+      // 저장하기 끝
+
+
+
   
   }
 
   // db에 데이터 저장하기
-  const saveData = async(apiResult, apiAiVersion) => {
+  const saveData = async(apiResult, apiAiVersion, immuneDurMonths) => {
     console.log('======================== saveData');
       const data = {
           date : date,
@@ -2029,7 +2080,7 @@ const [pltMsg, setPltMsg] = React.useState("");
           adm_blood: admBlood,
           adm_blood_name:admBloodName ,
           immune: immune,
-          immune_dur: immuneDur,
+          immune_dur: immuneDurMonths,
           immune_dur_name: immuneDurName,
           phx_skin: phxSkin,
           phx_skin_name: phxSkinName,
@@ -2128,7 +2179,7 @@ const [pltMsg, setPltMsg] = React.useState("");
       <div className="prediction-main">
         <div className="prediction-main-item ">
           <div className="left_empty" />
-          <div className="left_title"> <h1>기본정보</h1>&nbsp;&nbsp;<font style={{ fontSize:15, paddingTop:15, color:'#f55d42', fontWeight:'bolder' }} >* 입력필수</font></div>
+          <div className="left_title"> <h1>기본정보</h1>&nbsp;&nbsp;<font style={{ fontSize:15, paddingTop:15, color:'#f55d42', fontWeight:'bolder' }} >* 기본정보 항목이 모두 입력 되어야 모델 예측 가능합니다!</font></div>
         </div>
         <hr className="prediction-main_title_border_style" />
 
@@ -2206,7 +2257,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={motherAge}
               onChange={onChangeMotherAge}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~60"
               type="number"
             />
             <span>세</span>
@@ -2252,7 +2303,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={gestCnt}
               onChange={onChangeGestCnt}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
             />
             <span>회</span>
@@ -2270,7 +2321,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={ftpn}
               onChange={onChangeFtpn}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
             />
             <span>회</span>
@@ -2289,7 +2340,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={pbmh}
               onChange={onChangePbmh}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
             />
             <span>회</span>
@@ -2309,7 +2360,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={naturalMcCnt}
               onChange={onChangeNaturalMcCnt}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
               style={{ width: "100px" }}
             />
@@ -2321,7 +2372,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={artificialMcCnt}
               onChange={onChangeArtificialMcCnt}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
               style={{ width: "100px" }}
             />
@@ -2338,14 +2389,14 @@ const [pltMsg, setPltMsg] = React.useState("");
 <hr className="prediction-main_sub_border_style" />
 
         <div className="prediction-main-item">
-          <div className="left">임신중인 아기의 수</div>
+          <div className="left">현재 임신중인 태아의 수</div>
           <div className="right">
             <input
               id="twinKind"
               value={twinKind}
               onChange={onChangeTwinKind}
               maxLength="2"
-              placeholder="0"
+              placeholder="1~6"
               type="number"
             />
             <span>명</span>
@@ -2362,7 +2413,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={motherHeight}
               onChange={onChangeMotherHeight}
               maxLength="3"
-              placeholder="0"
+              placeholder="1~200"
               type="number"
               style={{ width: "100px" }}
             />
@@ -2373,7 +2424,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={motherOriginalWeight}
               onChange={onChangeMotherOriginalWeight}
               maxLength="3"
-              placeholder="0"
+              placeholder="1~200"
               type="number"
               style={{ width: "100px" }}
             />
@@ -2383,7 +2434,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               id="motherOriginalBmi"
               value={motherOriginalBmi}
               maxLength="2"
-              placeholder="0"
+              placeholder=""
               type="number"
               style={{ width: "100px" }}
               disabled
@@ -2401,7 +2452,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={sbp}
               onChange={onChangeSbp}
               maxLength="3"
-              placeholder="0"
+              placeholder="1~999"
               type="number"
               style={{ width: "100px" }}
             />&nbsp;&nbsp; / &nbsp;&nbsp;
@@ -2410,7 +2461,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={dbp}
               onChange={onChangeDbp}
               maxLength="3"
-              placeholder="0"
+              placeholder="1~999"
               type="number"
               style={{ width: "100px" }}
             />
@@ -2430,7 +2481,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={hr}
               onChange={onChangeHr}
               maxLength="3"
-              placeholder="0"
+              placeholder="1~999"
               type="number"
             />
             <span>회</span>
@@ -2445,9 +2496,8 @@ const [pltMsg, setPltMsg] = React.useState("");
             <input
               id="map"
               value={map}
-              // onChange={onChangeMap}
               maxLength="2"
-              placeholder="0"
+              placeholder=""
               disabled
             />
             <span>mmHg</span>
@@ -2495,14 +2545,14 @@ const [pltMsg, setPltMsg] = React.useState("");
         </div><hr className="prediction-main_sub_border_style" />
 
         <div className="prediction-main-item">
-          <div className="left">프로게스테론 사용기간</div>
+          <div className="left">현재임신 프로게스테론 사용기간</div>
           <div className="right">
             <input
               id="vpgDur"
               value={vpgDur}
               onChange={onChangeVpgDur}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~40"
               type="number"
             />
             <span>주</span>
@@ -2532,10 +2582,10 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={survch}
               onChange={onChangeSurvch}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
             />
-            <span>회</span>
+            <span>명</span>
           </div>
         </div><hr className="prediction-main_sub_border_style" />
 
@@ -2549,7 +2599,7 @@ const [pltMsg, setPltMsg] = React.useState("");
               value={csec}
               onChange={onChangeCsec}
               maxLength="2"
-              placeholder="0"
+              placeholder="0~20"
               type="number"
             />
             <span>회</span>
@@ -2859,9 +2909,9 @@ const [pltMsg, setPltMsg] = React.useState("");
                 ? "active" : ""
               }
             > 모름
-            </button>
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;
 
-            &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp;
+            {/* &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp; */}
             <input
                 id="enothName"
                 value={enothName}
@@ -2912,8 +2962,8 @@ const [pltMsg, setPltMsg] = React.useState("");
                 ? "active" : ""
               }
             > 모름
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp;
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+            {/* &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp; */}
             <input
                 id="admDigestName"
                 value={admDigestName}
@@ -2963,8 +3013,8 @@ const [pltMsg, setPltMsg] = React.useState("");
                 ? "active" : ""
               }
             > 모름
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp;
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+            {/* &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp; */}
             <input
                 id="admBloodName"
                 value={admBloodName}
@@ -3020,25 +3070,38 @@ const [pltMsg, setPltMsg] = React.useState("");
             </button>
             &nbsp;&nbsp;&nbsp;&nbsp;기간 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input
-                id="immuneDur"
-                value={immuneDur}
-                onChange={onChangeImmuneDur}
-                placeholder="0"
+                id="immuneDurYear"
+                value={immuneDurYear}
+                onChange={onChangeImmuneDurYear}
+                placeholder="0~20"
                 type="number"
-                style={{ width: "75px" }}
+                style={{ width: "60px" }}
                 disabled= {
                   (immune === "0" || immune === null || immune === 'DK') ? true:false
                 }
 
               />
-              <span>개월</span>
-            &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp;
+              <span>년&nbsp;&nbsp;</span>
+              <input
+                id="immuneDurMonth"
+                value={immuneDurMonth}
+                onChange={onChangeImmuneDurMonth}
+                placeholder="0~12"
+                type="number"
+                style={{ width: "60px" }}
+                disabled= {
+                  (immune === "0" || immune === null || immune === 'DK') ? true:false
+                }
+
+              />
+              <span>개월&nbsp;&nbsp;&nbsp;</span>
+            {/* &nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp; */}
             <input
                 id="immuneDurName"
                 value={immuneDurName}
                 onChange={onChangeImmuneDurName}
                 placeholder="질환명을 입력해주세요"
-                style={{ width: "200px" }}
+                style={{ width: "250px" }}
                 disabled= {
                   (immune === "0" || immune === null || immune === 'DK') ? true:false
                 }
@@ -3086,8 +3149,8 @@ const [pltMsg, setPltMsg] = React.useState("");
                 ? "active" : ""
               }
             > 모름
-            </button>
-            &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp;
+            </button>&nbsp;&nbsp;&nbsp;&nbsp;
+            {/* &nbsp;&nbsp;&nbsp;&nbsp;질환명 &nbsp;&nbsp; */}
             <input
                 id="phxSkinName"
                 value={phxSkinName}
@@ -3114,7 +3177,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                 value={myomano}
                 onChange={onChangeMyomano}
                 maxLength="2"
-                placeholder="0"
+                placeholder="0~99"
               />
               <span>개</span>
               <font className="left-red-description">* 모를 경우 0으로 표기해주세요</font>
@@ -3331,7 +3394,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   onChange={onChangeHb}
                   onBlur={onBlurHB}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0.1~25.0"
                   type="number"
                 />
                 <span>g/dl</span>
@@ -3359,7 +3422,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   onChange={onChangeWbc}
                   onBlur={onBlurWbc}
                   maxLength="5"
-                  placeholder="0"
+                  placeholder="0.01~50.00"
                   type="number"
                 />
                 <span>10⁹/L</span>
@@ -3384,7 +3447,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   onChange={onChangeHct}
                   onBlur={onBlurHct}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="20.0~80.0 "
                   type="number"
                 />
                 <span>%</span>
@@ -3409,7 +3472,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   onChange={onChangePlt}
                   onBlur={onBlurPlt}
                   maxLength="6"
-                  placeholder="0"
+                  placeholder="2.0~1000"
                   type="number"
                 />
                 <span>10⁹/L</span>
@@ -3437,7 +3500,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
         <div className="prediction-main-item">
           <div className={isE0 === true ? 'left' : 'left-bold'}>
-            GFR
+            eGFR
             <span className={isE0 === true ? 'left-white-point' : 'left-red-point'} >●</span>
           </div>
           <div className="right">
@@ -3446,7 +3509,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={gfr}
                   onChange={onChangeGfr}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3465,7 +3528,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={tc}
                   onChange={onChangeTc}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3477,7 +3540,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
         <div className="prediction-main-item">
           <div className={isE0 === true ? 'left' : 'left-bold'}>
-            Cholesterol
+          HDL cholesterol
             <span className={isE0 === true ? 'left-white-point' : 'left-red-point'} >●</span>
           </div>
           <div className="right">
@@ -3486,7 +3549,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={hdl}
                   onChange={onChangeHdl}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3504,7 +3567,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={ast}
                   onChange={onChangeAst}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>U/L</span>
@@ -3522,7 +3585,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={alt}
                   onChange={onChangeAlt}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>U/L</span>
@@ -3552,7 +3615,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={fasting100}
                   onChange={onChangeFasting100}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3574,7 +3637,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={ogtt50}
                   onChange={onChangeOgtt50}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3592,7 +3655,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={glucose}
                   onChange={onChangeGlucose}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="0~1000"
                   type="number"
                 />
                 <span>mg/dL</span>
@@ -3614,7 +3677,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={hba1c}
                   onChange={onChangeHba1c}
                   maxLength="4"
-                  placeholder="0"
+                  placeholder="1~20"
                   type="number"
                 />
                 <span>%</span>
@@ -3646,7 +3709,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={hcg}
                   onChange={onChangeHcg}
                   maxLength="6"
-                  placeholder="0"
+                  placeholder="0~100"
                   type="number"
                 />
                 <span>MoM</span>
@@ -3664,7 +3727,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={pappa}
                   onChange={onChangePappa}
                   maxLength="6"
-                  placeholder="0"
+                  placeholder="0~100"
                   type="number"
                 />
                 <span>MoM</span>

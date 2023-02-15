@@ -9,6 +9,23 @@ const GDM_SERVER = "https://api-gdm.icared.co.kr";
 
 const trim = (value) => {  return value.replace(/^\s+|\s+$/g, ""); };
 
+
+/**
+ * 00개월 수를 넣으면 0년 0개월로 반환함.
+ * @param {*} value 
+ */
+ const getYearMonth = (months) => {
+  const value = Number(months);
+  const year = Math.floor(value/12); // 나누기 몫
+  const month = value%12; // 나머지값
+
+  return {
+    "year": year,
+    "month": month
+  }
+}
+
+
 const Search = (param) => {
   const [hospital, setHospital] = React.useState("");
   const [id, setId] = React.useState("");
@@ -254,7 +271,7 @@ const Search = (param) => {
                   <tbody>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      임신중인 아기의 수
+                      현재 임신중인 태아의 수
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
                       {el.twin_kind}
@@ -319,7 +336,7 @@ const Search = (param) => {
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
-                      프로게스테론 질정 사용기간
+                      현재임신 프로게스테론 사용기간
                       </td>
                       <td width={"25%"} align="center">
                         {
@@ -470,7 +487,8 @@ const Search = (param) => {
                       </td>
                       <td width={"25%"} align="center">
                       {
-                        el.immune === "1" ? "Y" +  "/" + el.immune_dur+" 개월" + "/" + el.immune_dur_name : (el.immune === "0" ? "N": (el.immune === 'DK' ? '모름':'-' ))
+                        el.immune === "1" ? "Y/" + getYearMonth(el.immune_dur).year +"년 "+ getYearMonth(el.immune_dur).month +"개월" + (el.immune_dur_name === '' || el.immune_dur_name === null ? "":"/" + el.immune_dur_name) : (el.immune === "0" ? "N": (el.immune === 'DK' ? '모름':'-' ))
+
                       }
                       </td>
                     </tr>
@@ -629,7 +647,7 @@ const Search = (param) => {
                   <tbody>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      GFR
+                      eGFR
                       </td>
                       <td width={"25%"} align="center">
                       {
