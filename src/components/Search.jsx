@@ -391,7 +391,7 @@ const Search = (param) => {
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
-                      과거 임신시 임신성 당뇨
+                      과거 임신시 임신성 당뇨병
                       </td>
                       <td width={"25%"} align="center">
                       {
@@ -549,7 +549,7 @@ const Search = (param) => {
                   <tbody>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      당뇨
+                      당뇨병
                       </td>
                       <td width={"25%"} align="center">
                       {

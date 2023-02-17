@@ -860,7 +860,8 @@ const [pltMsg, setPltMsg] = React.useState("");
           setGestCnt("");
         else {
           // 과거 임신횟수가 1이상임에도 생존아수가 0명이면 alert.
-          if(Number(survch) === 0 && Number(value) > 0){
+
+          if((survch !== '') && (Number(survch) === 0 && Number(value) > 0)){
             // eslint-disable-next-line no-restricted-globals
             alert("과거 임신 횟수가 "+ value+"회 이상, 생존아수가 0명입니다. 예측 진행 이전에 다시한번 검토해주세요!");
           }
@@ -2651,7 +2652,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
         <div className="prediction-main-item">
-          <div className="left-bold">과거 임신시 임신성 당뇨<span className="left-red-point" >●</span></div>
+          <div className="left-bold">과거 임신시 임신성 당뇨병<span className="left-red-point" >●</span></div>
           <div className="right">
             <button
                 value="1"
@@ -3282,7 +3283,7 @@ const [pltMsg, setPltMsg] = React.useState("");
         <hr className="prediction-main_title_border_style" />
 
         <div className="prediction-main-item">
-          <div className="left-bold">당뇨<span className="left-red-point" >●</span></div>
+          <div className="left-bold">당뇨병<span className="left-red-point" >●</span></div>
           <div className="right">
           <button
               value="1"
