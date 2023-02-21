@@ -336,7 +336,7 @@ const Search = (param) => {
                       }
                       </td>
                       <td width={"25%"} align="center" className="title-column">
-                      현재임신 프로게스테론 사용기간
+                      현재임신<br/>프로게스테론 질정 사용기간
                       </td>
                       <td width={"25%"} align="center">
                         {
@@ -447,7 +447,7 @@ const Search = (param) => {
                     </tr>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      인슐린 저항성 관련 질환<br />(당뇨 전단계)
+                      인슐린 저항성 관련 질환<br />(당뇨병 전단계)
                       </td>
                       <td width={"75%"} align="center" colSpan={3}>
                       {

@@ -1062,24 +1062,29 @@ const [pltMsg, setPltMsg] = React.useState("");
    * @param {*} objectId : 
    */
   const calculatePreg = (gestCnt, ftpn, pbmh, naturalMcCnt, artificialMcCnt, objectId) => {
-    const nGestCnt = Number(gestCnt);
-    const nFtpn = Number(ftpn);
-    const nPbmh = Number(pbmh);
-    const nNaturalMcCnt = Number(naturalMcCnt);
-    const nArtificialMcCnt = Number(artificialMcCnt);
 
-    // console.log('nFtpn : ' + nFtpn);
-    // console.log('nPbmh : ' + nFtpn);
-    // console.log('nNaturalMcCnt : ' + nNaturalMcCnt);
-    // console.log('nArtificialMcCnt : ' + nArtificialMcCnt);
-    
+    // 모든 항목들이 기입되었을때 계산을 함.
+    if(gestCnt !== '' && ftpn !== '' && pbmh !== '' && naturalMcCnt !== '' && artificialMcCnt !== ''){
+      const nGestCnt = Number(gestCnt);
+      const nFtpn = Number(ftpn);
+      const nPbmh = Number(pbmh);
+      const nNaturalMcCnt = Number(naturalMcCnt);
+      const nArtificialMcCnt = Number(artificialMcCnt);
 
-
-    const totalGestCnt = nFtpn + nPbmh + nNaturalMcCnt + nArtificialMcCnt;
-    if(nGestCnt < totalGestCnt) {
-      focus("만삭분만횟수, 조산횟수, 유산횟수의 합이 과거임신횟수보다 많을 수 없습니다.", getObject(objectId));
-      return false;
-    }else return true;
+      // console.log('gestCnt :'+ gestCnt);
+      // console.log('ftpn :'+ ftpn);
+      // console.log('pbmh :'+ pbmh);
+      // console.log('naturalMcCnt :'+ naturalMcCnt);
+      // console.log('artificialMcCnt :'+ artificialMcCnt);
+  
+      const totalGestCnt = nFtpn + nPbmh + nNaturalMcCnt + nArtificialMcCnt;
+      if(nGestCnt !== totalGestCnt){
+        focus("만삭분만횟수, 조산횟수, 유산횟수의 합은 과거 임신횟수와 동일해야 합니다.", getObject(objectId));
+        return false;
+      }else return true;
+    }
+    return true;
+  
   }
 
 
@@ -2021,7 +2026,7 @@ const [pltMsg, setPltMsg] = React.useState("");
         console.log('prediction :' + response.data.prediction);
         result =  response.data.prediction;
         version = response.data.modelVersion;
-          saveData(Number(result).toFixed(), version, immuneDurTemp);
+          saveData(result, version, immuneDurTemp);
       })
       .catch(function (error) {
         console.log(error);
@@ -2546,7 +2551,8 @@ const [pltMsg, setPltMsg] = React.useState("");
         </div><hr className="prediction-main_sub_border_style" />
 
         <div className="prediction-main-item">
-          <div className="left">현재임신 프로게스테론 사용기간</div>
+          <div className="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          현재임신<br/>프로게스테론 질정 사용기간</div>
           <div className="right">
             <input
               id="vpgDur"
@@ -2796,7 +2802,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
         <div className="prediction-main-item">
-          <div className="left">인슐린저항성관련질환<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(당뇨전단계)</div>
+          <div className="left">인슐린저항성관련질환<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(당뇨병 전단계)</div>
           <div className="right">
           <button
               value="1"
