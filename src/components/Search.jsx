@@ -161,7 +161,7 @@ const Search = (param) => {
           <div className="content-box"   key={key}>
             <div className="head-info">
               <div>
-              {el.date}  기준 GDM 확률{" "}
+              {el.date} ({el.crnt_gest_weeks_w} {`주 `}{el.crnt_gest_weeks_d}{`일`})기준 GDM 확률{" "}
                 <span style={{ color: "#FF8575" }}>{el.result}%</span> 로 예측됩니다. 
                 
               </div>
