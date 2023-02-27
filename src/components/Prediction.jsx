@@ -44,13 +44,11 @@ const getYearMonth = (months) => {
  * @param {*} value 
  */
 const getOnlyNumber = (value) => {
-  // if(validationNum(value)) return value;
-  // else return value.replace('.','');
-
   if(validationNum(value)) return value;
   else{
     // 소수점이 들어오면 소수점 이하는 생략하고 반환함.
-    const arr = value.split(".");
+    const val = value.split("-")[0];
+    const arr = val.split(".");
     return arr[0];
   }
 }
@@ -122,9 +120,9 @@ const checkNumberRage = (value, min, max) => {
   const fMin = parseFloat(min);
   const fMax = parseFloat(max);
 
-  // console.log('fValue :' + fValue);
-  // console.log('fMin :' + fMin);
-  // console.log('fMax :' + fMax);
+  //  console.log('fValue :' + fValue);
+  //  console.log('fMin :' + fMin);
+  //  console.log('fMax :' + fMax);
 
   return (fMin <= fValue && fValue <= fMax) ? true:false;
 }
@@ -194,8 +192,8 @@ const [pltMsg, setPltMsg] = React.useState("");
   // 경산모 항목
   const [ survch, setSurvch] = React.useState("");                                // 생존아 수
   const [ csec, setCsec] = React.useState("");                                    // 제왕절개 수술 횟수
-  const [ prevPrevia, setPrevPrevia] = React.useState(null);                        // 전치태반
-  const [ prevGestDm, setPrevGestDm] = React.useState(null);                        // 이전 임신 임신성 당뇨 과거력
+  const [ prevPrevia, setPrevPrevia] = React.useState("");                        // 전치태반
+  const [ prevGestDm, setPrevGestDm] = React.useState("");                        // 이전 임신 임신성 당뇨 과거력
   const [ prevLga, setPrevLga] = React.useState("");                              // 거대아 분만력
 
 
@@ -1144,7 +1142,8 @@ const [pltMsg, setPltMsg] = React.useState("");
     // 클릭한 버튼에 따라 on/off 스타일 변경
     onChangeButtonState('prevPrevia', e.target);
 
-    const value = (e.target.value === 'DK' ? null:e.target.value);
+    //const value = (e.target.value === 'DK' ? null:e.target.value);
+    const value = e.target.value;
     setPrevPrevia(value); // Y, N, null ('모름'일 경우 null값을 넣음.)
   }
 
@@ -1681,9 +1680,12 @@ const [pltMsg, setPltMsg] = React.useState("");
 
     if(value !== ''){
       if(validationNum(value)){
+
         if(checkNumberRage(value, 0, 1000)) setFasting100(value);
         else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("fasting100"));}
+
       }else{
+
         setFasting100(getOnlyNumber(value));
       }
       
@@ -1949,9 +1951,12 @@ const [pltMsg, setPltMsg] = React.useState("");
     if(immuneDurYear === '' || immuneDurYear === null) immuneDurYearTemp = 0;
     if(immuneDurMonth === '' || immuneDurMonth === null) immuneDurMonthTemp = 0;
 
+    // console.log('immuneDurYearTemp :' + immuneDurYearTemp);
+    // console.log('immuneDurMonthTemp :' + immuneDurMonthTemp);
+
     const immuneDurTemp = (12 * Number(immuneDurYearTemp) ) + Number(immuneDurMonthTemp);
     setImmuneDur(immuneDurTemp);
-
+    console.log('smoking :' + smoking);
 
     // 저장하기
     const data = {
@@ -1971,26 +1976,26 @@ const [pltMsg, setPltMsg] = React.useState("");
       dbp: Number(dbp),
       hr: Number(hr),
       map: Number(map),
-      smoking: smoking === 'DK' ?  null : Number(smoking),
-      fhxDm: fhxDm === 'DK' ?  null : Number(fhxDm), // Number(fhxDm),
-      fhxHtn: fhxHtm === 'DK' ?  null : Number(fhxHtm), // Number(fhxHtm),
-      phxCycle: phxCycle === 'DK' ?  null : Number(phxCycle), //Number(phxCycle),
-      pcos: pcos === 'DK' ?  null : Number(pcos), // Number(pcos),
-      igt: igt === 'DK' ?  null : Number(igt),//Number(igt),
-      hyperlipidemia: hylipidc === 'DK' ?  null : Number(hylipidc), //Number(hylipidc),
-      enoth: enoth === 'DK' ?  null : Number(enoth), //Number(enoth),
-      admBlood: admBlood === 'DK' ?  null : Number(admBlood), //Number(admBlood),
-      admDigest: admDigest === 'DK' ?  null : Number(admDigest), // Number(admDigest),
-      phxOvarian: phxOvarian === 'DK' ?  null : Number(phxOvarian), // Number(phxOvarian),
-      phxSkin: phxSkin === 'DK' ?  null : Number(phxSkin), // Number(phxSkin),
+      smoking: smoking === 'DK' || smoking === '' ?  null : Number(smoking),
+      fhxDm: fhxDm === 'DK'  || fhxDm === ''  ?  null : Number(fhxDm), // Number(fhxDm),
+      fhxHtn: fhxHtm === 'DK' || fhxHtm === '' ?  null : Number(fhxHtm), // Number(fhxHtm),
+      phxCycle: phxCycle === 'DK' || phxCycle === '' ?  null : Number(phxCycle), //Number(phxCycle),
+      pcos: pcos === 'DK' || pcos === ''  ?  null : Number(pcos), // Number(pcos),
+      igt: igt === 'DK' || igt === '' ?  null : Number(igt),//Number(igt),
+      hyperlipidemia: hylipidc === 'DK' || hylipidc === ''  ?  null : Number(hylipidc), //Number(hylipidc),
+      enoth: enoth === 'DK' || enoth === '' ?  null : Number(enoth), //Number(enoth),
+      admBlood: admBlood === 'DK' || admBlood === '' ?  null : Number(admBlood), //Number(admBlood),
+      admDigest: admDigest === 'DK' || admDigest === '' ?  null : Number(admDigest), // Number(admDigest),
+      phxOvarian: phxOvarian === 'DK'|| phxOvarian === ''  ?  null : Number(phxOvarian), // Number(phxOvarian),
+      phxSkin: phxSkin === 'DK' || phxSkin === ''  ?  null : Number(phxSkin), // Number(phxSkin),
       immuneDur: immuneDurTemp, // 0년 0개월을 00개월수로 변환하여 저장함.
       myomano: myomano === '' || myomano === null ? 0 : Number(myomano),
       survch: Number(survch),
-      prevGestDm: prevGestDm === 'DK' ?  null : Number(prevGestDm), //Number(prevGestDm),
+      prevGestDm: prevGestDm === 'DK' || prevGestDm === ''  ?  null : Number(prevGestDm), //Number(prevGestDm),
       csec: Number(csec),
       pbmh: Number(pbmh),
-      prevPrevia: prevPrevia === 'DK' ?  null : Number(prevPrevia), //Number(prevPrevia),
-      prevLga: prevLga === 'DK' ?  null : Number(prevLga), //Number(prevLga),
+      prevPrevia: prevPrevia === 'DK'|| prevPrevia === ''  ?  null : Number(prevPrevia), //Number(prevPrevia),
+      prevLga: prevLga === 'DK' || prevLga === '' ?  null : Number(prevLga), //Number(prevLga),
       ftpn: Number(ftpn),
       wbc: Number(wbc),
       hb: Number(hb),
@@ -2023,10 +2028,10 @@ const [pltMsg, setPltMsg] = React.useState("");
     await axios
       .post(INNERWARE_SERVER, data, { headers })
       .then(function (response) {
-        console.log('prediction :' + response.data.prediction);
+        // console.log('prediction :' + response.data.prediction);
         result =  response.data.prediction;
         version = response.data.modelVersion;
-          saveData(result, version, immuneDurTemp);
+        saveData(result, version, immuneDurTemp);
       })
       .catch(function (error) {
         console.log(error);
