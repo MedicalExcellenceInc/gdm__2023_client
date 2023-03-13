@@ -1566,7 +1566,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
   /**
-   * GFR : 범위 0 ~ 1000 정수.
+   * GFR : 범위 0 ~ 500 정수.
    * @param {*} e 
    */
    const onChangeGfr = (e) => {
@@ -1574,8 +1574,8 @@ const [pltMsg, setPltMsg] = React.useState("");
 
     if(value !== ''){
       if(validationNum(value)){
-        if(checkNumberRage(value, 0, 1000)) setGfr(value);
-        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("gfr"));}
+        if(checkNumberRage(value, 0, 500)) setGfr(value);
+        else {focus("0~500 사이 정수만 입력해 주세요.", getObject("gfr"));}
       }else{
         setGfr(getOnlyNumber(value));
       }
@@ -1639,8 +1639,8 @@ const [pltMsg, setPltMsg] = React.useState("");
 
     if(value !== ''){
       if(validationNum(value)){
-        if(checkNumberRage(value, 0, 1000)) setAst(value);
-        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("ast"));}
+        if(checkNumberRage(value, 0, 5000)) setAst(value);
+        else {focus("0~5000 사이 정수만 입력해 주세요.", getObject("ast"));}
       }else{
         setAst(getOnlyNumber(value));
       }
@@ -1651,7 +1651,7 @@ const [pltMsg, setPltMsg] = React.useState("");
 
 
   /**
-   * ALT : 범위 0 ~ 1000 정수.
+   * ALT : 범위 0 ~ 5000 정수.
    * @param {*} e 
    */
    const onChangeAlt = (e) => {
@@ -1659,8 +1659,8 @@ const [pltMsg, setPltMsg] = React.useState("");
 
     if(value !== ''){
       if(validationNum(value)){
-        if(checkNumberRage(value, 0, 1000)) setAlt(value);
-        else {focus("0~1000 사이 정수만 입력해 주세요.", getObject("alt"));}
+        if(checkNumberRage(value, 0, 5000)) setAlt(value);
+        else {focus("0~5000 사이 정수만 입력해 주세요.", getObject("alt"));}
       }else{
         setAlt(getOnlyNumber(value));
       }
@@ -3521,10 +3521,10 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={gfr}
                   onChange={onChangeGfr}
                   maxLength="4"
-                  placeholder="0~1000"
+                  placeholder="0~500"
                   type="number"
                 />
-                <span>mg/dL</span>
+                <span>mL/min</span>
           </div>
         </div>
         <hr className="prediction-main_sub_border_style" />
@@ -3579,7 +3579,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={ast}
                   onChange={onChangeAst}
                   maxLength="4"
-                  placeholder="0~1000"
+                  placeholder="0~5000"
                   type="number"
                 />
                 <span>U/L</span>
@@ -3597,7 +3597,7 @@ const [pltMsg, setPltMsg] = React.useState("");
                   value={alt}
                   onChange={onChangeAlt}
                   maxLength="4"
-                  placeholder="0~1000"
+                  placeholder="0~5000"
                   type="number"
                 />
                 <span>U/L</span>
