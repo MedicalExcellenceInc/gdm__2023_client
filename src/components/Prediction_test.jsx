@@ -154,14 +154,19 @@ const Prediction = () => {
   // ****** 화면 콘트롤을 위한 변수들 
   const [isE0, setIsE0] = React.useState(true);  // E0 or M1. 디폴트는 E0.
 
-// ******  메시지 변수들
-const [hbMsg, setHbMsg] = React.useState("");
-const [wbcMsg, setWbcMsg] = React.useState("");
-const [hctMsg, setHctMsg] = React.useState("");
-const [pltMsg, setPltMsg] = React.useState("");
+  // 결과값 확인용 변수들
+  const [saveDBData, setSaveDBData] = React.useState("-");
+  const [sendData, setSendData] = React.useState("-");
+  const [resultData, setResultData] = React.useState("-");
 
-const [lymphocytMsg, setLymphocytMsg] = React.useState("");  // (20230314 추가)
-const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추가)
+  // ******  메시지 변수들
+  const [hbMsg, setHbMsg] = React.useState("");
+  const [wbcMsg, setWbcMsg] = React.useState("");
+  const [hctMsg, setHctMsg] = React.useState("");
+  const [pltMsg, setPltMsg] = React.useState("");
+
+  const [lymphocytMsg, setLymphocytMsg] = React.useState("");  // (20230314 추가)
+  const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추가)
   // ******  입력항목 변수들
   // 기본항목
   const [ date, setDate] = React.useState(getFormatDate(new Date()));
@@ -2098,7 +2103,7 @@ const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추�
     }// apiData
 
     console.log(data);
-
+    setSendData(JSON.stringify(data, null, 2)); // 내부 확인용
 
 
     let result = null;
@@ -2114,6 +2119,7 @@ const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추�
         result =  response.data.prediction;
         version = response.data.modelVersion;
         saveData(result, version, immuneDurTemp);
+        setResultData(result); // 내부 확인용
       })
       .catch(function (error) {
         console.log(error);
@@ -2206,22 +2212,22 @@ const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추�
       };
 
        console.log(data);
+       setSaveDBData(JSON.stringify(data, null, 2));
 
-
-      await axios
-        .post(GDM_SERVER + "/add", data)
-        .then(function (response) {
-          console.log(response);
-          if (response.data === true && response.status === 200) {
-            alert("저장되었습니다.");
-            window.location.replace("/search?hospital=" + hospital + "&idCode=" + idCode);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-          alert(error + " : 저장하지 못하였습니다.");
-          return;
-        });
+      // await axios
+      //   .post(GDM_SERVER + "/add", data)
+      //   .then(function (response) {
+      //     console.log(response);
+      //     if (response.data === true && response.status === 200) {
+      //       alert("저장되었습니다.");
+      //       window.location.replace("/search?hospital=" + hospital + "&idCode=" + idCode);
+      //     }
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //     alert(error + " : 저장하지 못하였습니다.");
+      //     return;
+      //   });
 
   }
 
@@ -2267,15 +2273,139 @@ const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추�
     }// ELSE
   }// CONST
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect( async() => {
+    const temp = {};
+    new URLSearchParams(window.location.search).forEach((value, key) => {  temp[key] = value; });
+
+    if(temp.id != null) {
+      // setHospital(temp.hospital);
+      // setId(temp.idCode);
+      // document.getElementById('hospital').value = temp.hospital;
+      // findContents2(temp.hospital, temp.idCode);
+      const result = await axios({
+        method: "get",
+        url: GDM_SERVER + "/getone?id=" + temp.id,
+        responseType: "type",
+      });
+      
+      const data = result.data[0];
+      console.log(data);
+
+      if(data) {
+
+        setIsE0(Number(data.crnt_gest_weeks_w) <= 13 ? true:false);
+
+        // 기본항목
+          setDate(data.date);
+          setHospital(data.hospital);
+          setIdCode(data.id_code);
+          setMotherAge(data.mother_age);
+          setCrntGestWeeksW(data.crnt_gest_weeks_w);
+          setCrntGestWeeksD(data.crnt_gest_weeks_d);
+
+          setEdc(data.edc);
+          setGestCnt(data.gest_cnt);
+          setBirthCnt(data.birth_cnt);
+          setFtpn(data.ftpn);
+          setPbmh(data.pbmh);
+          setNaturalMcCnt(data.natural_mc_cnt);
+          setArtificialMcCnt(data.artificial_mc_cnt);
+
+          // 기본 하위항목
+          setTwinKind(data.twin_kind);
+          setMotherOriginalWeight(data.mother_original_weight);
+          setMotherHeight(data.mother_height);
+          setMotherOriginalBmi(data.mother_original_bmi);
+          setSbp(data.sbp);
+          setDbp(data.dbp);
+          setHr(data.hr);
+          setMap(data.map);
+          setSmoking(data.smoking);
+          setVpgDur(data.vpg_dur);
+
+          // 경산모
+          setSurvch(data.survch);
+          setCsec(data.csec);
+          setPrevPrevia(data.prev_previa);
+          setPrevGestDm(data.prev_gest_dm);
+          setPrevLga(data.prev_lga);
+
+          // 읽어온값에서 출산횟수가 1보다 많으면 경산모 활성화. 아닐때는 비활성화
+          onDisplayMultiparousDiv(data.ftpn, data.pbmh);
+
+          // 과거력
+          setPhxCycle(data.phx_cycle);
+          setIgt(data.igt);
+          setHylipidc(data.hylipidc);
+          setEnoth(data.enoth);
+          setEnothName(data.enoth_name);
+          setAdmDigest(data.adm_digest);
+          setAdmDigestName(data.adm_digest_name);
+          setAdmBlood(data.adm_blood);
+          setAdmBloodName(data.adm_blood_name);
+          setImmune(data.immune);
+          setImmuneDur(data.immune_dur);
+          setImmuneDurYear(getYearMonth(data.immune_dur).year);
+          setImmuneDurMonth(getYearMonth(data.immune_dur).month);
+          setImmuneDurName(data.immune_dur_name);
+          setPhxSkin(data.phx_skin);
+          setPhxSkinName(data.phx_skin_name);
+          setMyomano(data.myomano);
+          setPcos(data.pcos);
+          setPhxOvarian(data.phx_ovarian);
+
+          // 가족력 항목
+          setFhxDm(data.fhx_dm);
+          setFhxHtm(data.fhx_htm);
+
+          // 혈액검사결과
+          setHb(data.hb);
+          setWbc(data.wbc);
+          setLymphocyt(data.lymphocyt);
+          setNeutrophil(data.neutrophil);
+          setHct(data.hct);
+          setPlt(data.plt);
+
+          // BC
+          setGfr(data.gfr);
+          setTc(data.tc);
+          setHdl(data.hdl);
+          setLdl(data.ldl);
+          setAst(data.ast);
+          setAlt(data.alt);
+
+          // 혈당검사 
+          setFasting100(data.fasting_100);
+          setOgtt50(data.ogtt_50);
+          setGlucose(data.glucose);
+          setHba1c(data.hba1c);
+
+          // 태아스크리닝
+          setHcg(data.hcg);
+          setPappa(data.pappa);
+          // setResult(data.result);
+
+          setResultData(data.result);
+
+          // 기존 데이터를 가져와 뿌려줬을때는 '예측하기'버튼을 바로 노출.
+        document.getElementById("prevBtnDiv").style.display = 'block';
+        document.getElementById("prevBtnDiv").style.alignItems = 'center';
+        document.getElementById("prevBtnDiv").style.flex = 7;
+      }
+
+    }
+    
+  }, []);
 
   return (
     
     <div className="content-container">
       <div className="prediction-description">예측 필요항목<span style={{fontSize: 20,  fontWeight:'bolder' , color: '#f55d42', marginBottom: 25,  marginLeft: 6 }} >●</span><font style={{marginLeft: 50, fontWeight:'lighter'}}>선택항목</font></div> 
-      <div className="prediction-main">
-        <div className="prediction-main-item ">
+      <div className="prediction-main"> * 개발자 데이터 확인용 페이지입니다. 일반 사용자는 사용불가합니다.!!! (저장은 되지 않고, 오가는 데이터만 확인함)
+        <div className="prediction-main-item "> 
           <div className="left_empty" />
-          <div className="left_title"> <h1>기본정보</h1>&nbsp;&nbsp;<font style={{ fontSize:15, paddingTop:15, color:'#f55d42', fontWeight:'bolder' }} >* 기본정보 항목이 모두 입력 되어야 모델 예측 가능합니다!</font></div>
+          <div className="left_title"> <h1>기본정보2</h1>&nbsp;&nbsp;<font style={{ fontSize:15, paddingTop:15, color:'#f55d42', fontWeight:'bolder' }} >* 기본정보 항목이 모두 입력 되어야 모델 예측 가능합니다!</font></div>
         </div>
         <hr className="prediction-main_title_border_style" />
 
@@ -3936,8 +4066,15 @@ const [neutrophilMsg, setNeutrophilMsg] = React.useState(""); // (20230314 추�
             </div>
         </div>
 
-
-        
+<br /><br /><br /><br />
+SAVE DATA ------<br />
+{saveDBData}
+<br /><br /><br /><br />
+SEND DATA ------<br />
+{sendData}
+<br /><br /><br /><br />
+RESULT DATA ------<br />
+{resultData}
         <div className="prediction-main-item2">
           <div className='left'></div>
           <div className="right">

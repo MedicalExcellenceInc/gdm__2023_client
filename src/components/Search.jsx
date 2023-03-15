@@ -217,14 +217,7 @@ const Search = (param) => {
                         </div>
                       </td>
                     </tr>
-                    <tr align="center">
-                      <td width={"25%"} align="center" className="title-column">
-                      과거임신횟수
-                      </td>
-                      <td width={"75%"} align="center" colSpan={3}>
-                        {el.gest_cnt}회
-                      </td>
-                    </tr>
+                    
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
                       만삭분만횟수
@@ -239,20 +232,7 @@ const Search = (param) => {
                       {el.pbmh}회
                       </td>
                     </tr>
-                    <tr align="center">
-                      <td width={"25%"} align="center" className="title-column">
-                      자연유산횟수
-                      </td>
-                      <td width={"25%"} align="center">
-                      {el.natural_mc_cnt}회
-                      </td>
-                      <td width={"25%"} align="center" className="title-column">
-                      인공유산횟수
-                      </td>
-                      <td width={"25%"} align="center">
-                      {el.artificial_mc_cnt}회
-                      </td>
-                    </tr>
+                   
                   </tbody>
                 </table>
 
@@ -269,17 +249,40 @@ const Search = (param) => {
                   style={{ marginTop: 30, marginBottom: 60 }}
                 >
                   <tbody>
+                  <tr align="center">
+                      <td width={"25%"} align="center" className="title-column">
+                      자연유산횟수
+                      </td>
+                      <td width={"25%"} align="center">
+                      {el.natural_mc_cnt}회
+                      </td>
+                      <td width={"25%"} align="center" className="title-column">
+                      인공유산횟수
+                      </td>
+                      <td width={"25%"} align="center">
+                      {el.artificial_mc_cnt}회
+                      </td>
+                    </tr>
+
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      현재 임신중인 태아의 수
+                      현재 임신중인 <br />태아의 수
                       </td>
-                      <td width={"75%"} align="center" colSpan={3}>
+                      <td width={"25%"} align="center" >
                       {el.twin_kind}
                       {
                         el.twin_kind !== '' ?
                         " 명" : "-"
                       }
                       </td>
+
+                      <td width={"25%"} align="center" className="title-column">
+                      과거임신횟수
+                      </td>
+                      <td width={"25%"} align="center" >
+                        {el.gest_cnt}회
+                      </td>
+
                     </tr>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
@@ -607,6 +610,26 @@ const Search = (param) => {
                     </tr>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
+                      Lymphocyt
+                      </td>
+                      <td width={"25%"} align="center">
+                      {
+                          el.lymphocyt !== '' ?
+                          el.lymphocyt + ' %' : '-'
+                        }
+                      </td>
+                      <td width={"25%"} align="center" className="title-column">
+                      Neutrophil
+                      </td>
+                      <td width={"25%"} align="center">
+                      {
+                          el.neutrophil !== '' ?
+                          el.neutrophil + ' %' : '-'
+                        }
+                      </td>
+                    </tr>
+                    <tr align="center">
+                      <td width={"25%"} align="center" className="title-column">
                       HCT
                       </td>
                       <td width={"25%"} align="center">
@@ -669,10 +692,19 @@ const Search = (param) => {
                       <td width={"25%"} align="center" className="title-column">
                       Cholesterol
                       </td>
-                      <td width={"75%"} align="center" colSpan={3}>
+                      <td width={"25%"} align="center" >
                       {
                           el.hdl !== '' ?
                           el.hdl + ' mg/dL' : '-'
+                        }
+                      </td>
+                      <td width={"25%"} align="center" className="title-column">
+                      LDL Cholesterol
+                      </td>
+                      <td width={"25%"} align="center" >
+                      {
+                          el.ldl !== '' ?
+                          el.ldl + ' mg/dL' : '-'
                         }
                       </td>
                     </tr>

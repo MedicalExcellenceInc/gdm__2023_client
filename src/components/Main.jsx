@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Prediction from "./Prediction";
+import Prediction_test from "./Prediction_test";
 import Search from "./Search";
 
 const Main = () => {
@@ -35,7 +36,7 @@ const Main = () => {
         </button>
       </div>
       <div className="main-content">
-        {view === "prediction" ? <Prediction /> : <Search />}
+        {view === "prediction" ? <Prediction /> : (view === 'search' ? <Search /> : <Prediction_test />) }
       </div>
     </div>
   );
