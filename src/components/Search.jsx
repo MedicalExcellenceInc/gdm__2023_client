@@ -277,7 +277,7 @@ const Search = (param) => {
                       </td>
 
                       <td width={"25%"} align="center" className="title-column">
-                      과거임신횟수
+                      과거임신 총 횟수
                       </td>
                       <td width={"25%"} align="center" >
                         {el.gest_cnt}회
@@ -690,7 +690,7 @@ const Search = (param) => {
                     </tr>
                     <tr align="center">
                       <td width={"25%"} align="center" className="title-column">
-                      Cholesterol
+                      HDL Cholesterol
                       </td>
                       <td width={"25%"} align="center" >
                       {
